@@ -35,13 +35,13 @@ body {
 }
 
 /* Full-bleed background: IMG_2733 cut into a top piece, a seamless repeating
-   middle band of vines and a bottom scene (see public/bg), each scaled to the
+   middle band of vines and a bottom scene (see public/), each scaled to the
    full screen width. The middle band starts where the top piece was cut
    (1.0442 × the width). */
 .card {
-  --bg-top: url("/bg/bg-top.webp");
-  --bg-mid: url("/bg/bg-mid.jpg");
-  --bg-bottom: url("/bg/bg-bottom.webp");
+  --bg-top: var(--bg-top-sm);
+  --bg-mid: var(--bg-mid-sm);
+  --bg-bottom: var(--bg-bottom-sm);
   position: relative;
   width: 100%;
   min-height: 100vh;
@@ -56,9 +56,9 @@ body {
 }
 @media (min-width: 700px) {
   .card {
-    --bg-top: url("/bg/bg-top-lg.webp");
-    --bg-mid: url("/bg/bg-mid-lg.jpg");
-    --bg-bottom: url("/bg/bg-bottom-lg.webp");
+    --bg-top: var(--bg-top-lg);
+    --bg-mid: var(--bg-mid-lg);
+    --bg-bottom: var(--bg-bottom-lg);
   }
 }
 
