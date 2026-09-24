@@ -7,7 +7,6 @@ import { MusicPlayer } from "./components/MusicPlayer";
 import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
 import { RsvpModal } from "./components/Modal";
-import { assetPath } from "./asset-path";
 
 const reception = w.events.find((e) => e.name === "Reception");
 const gcalDate = (iso: string) => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, "");
@@ -20,12 +19,12 @@ const calendarUrl =
 export default function Home() {
   const couple = `${w.bride} & ${w.groom}`;
   const cardBackgrounds = {
-    "--bg-top-sm": `url("${assetPath("/bg-top.webp")}")`,
-    "--bg-mid-sm": `url("${assetPath("/bg-mid.jpg")}")`,
-    "--bg-bottom-sm": `url("${assetPath("/bg-bottom.webp")}")`,
-    "--bg-top-lg": `url("${assetPath("/bg-top-lg.webp")}")`,
-    "--bg-mid-lg": `url("${assetPath("/bg-mid-lg.jpg")}")`,
-    "--bg-bottom-lg": `url("${assetPath("/bg-bottom-lg.webp")}")`,
+    "--bg-top-sm": 'url("bg-top.webp")',
+    "--bg-mid-sm": 'url("bg-mid.jpg")',
+    "--bg-bottom-sm": 'url("bg-bottom.webp")',
+    "--bg-top-lg": 'url("bg-top-lg.webp")',
+    "--bg-mid-lg": 'url("bg-mid-lg.jpg")',
+    "--bg-bottom-lg": 'url("bg-bottom-lg.webp")',
   } as CSSProperties;
 
   return (
@@ -54,7 +53,7 @@ export default function Home() {
           {/* ---------- Music ---------- */}
           <Reveal className="block player-wrap" variant="up">
             <div className="paper">
-              <MusicPlayer src={assetPath(w.songUrl as `/${string}`)} />
+              <MusicPlayer src={w.songUrl} />
             </div>
             <Anthurium className="fl fl-player" />
           </Reveal>

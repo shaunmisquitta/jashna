@@ -1,5 +1,4 @@
 import type { CSSProperties, ReactNode } from "react";
-import { assetPath } from "../asset-path";
 
 // Deterministic RNG so server and client render identical SVG.
 function rng(seed: number) {
@@ -379,10 +378,10 @@ export function ArchPainting({ className = "" }: { className?: string }) {
 
         <g className="couple" filter="url(#sticker)">
           <g className="couple-bride">
-            <image href={assetPath("/bride.webp")} x="34" y="72" width="176" height="331" />
+            <image href="bride.webp" x="34" y="72" width="176" height="331" />
           </g>
           <g className="couple-groom">
-            <image href={assetPath("/groom.webp")} x="186" y="76" width="113" height="330" />
+            <image href="groom.webp" x="186" y="76" width="113" height="330" />
           </g>
         </g>
 
