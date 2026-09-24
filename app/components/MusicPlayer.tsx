@@ -138,22 +138,14 @@ export function MusicPlayer({ src }: { src: string }) {
     boxRef.current?.setVolume(volume);
   }, [volume]);
 
-  // Browsers that permit audible autoplay will start immediately. If autoplay
-  // is blocked, opening the invitation provides the user gesture needed to play.
+  // Prepare the requested starting position while keeping playback paused
+  // until the guest explicitly presses Play.
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.5;
     seekToSongStart(audio);
-    void audio.play().then(() => setPlaying(true), () => undefined);
   }, [seekToSongStart]);
-
-  // Start music when the intro envelope is opened.
-  useEffect(() => {
-    const onOpen = () => play();
-    window.addEventListener("wedding:open", onOpen);
-    return () => window.removeEventListener("wedding:open", onOpen);
-  }, [play]);
 
   // Progress for the synth fallback.
   useEffect(() => {

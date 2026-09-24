@@ -28,8 +28,6 @@ export function Intro({ bride, groom, monogram }: { bride: string; groom: string
   const open = () => {
     if (stage !== "closed") return;
     setStage("opening");
-    // Dispatched inside the click so the music player may start audio.
-    window.dispatchEvent(new Event("wedding:open"));
   };
 
   return (
