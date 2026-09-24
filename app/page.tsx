@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import { wedding as w } from "./wedding.config";
-import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, OldLetter, SmallEnvelope, SvgDefs, Tag, WaxSeal } from "./components/decor";
+import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, OldLetter, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
 import { Reveal } from "./components/Reveal";
 import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
@@ -8,24 +9,11 @@ import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
 import { RsvpModal } from "./components/Modal";
 
-const reception = w.events.find((e) => e.name === "Reception");
-const gcalDate = (iso: string) => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, "");
-const calendarUrl =
-  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-  `&text=${encodeURIComponent(`${w.bride} & ${w.groom}’s Wedding`)}` +
-  `&dates=${gcalDate(w.date)}/${gcalDate(w.endDate)}` +
-  `&location=${encodeURIComponent(reception ? `${reception.venue}, ${reception.address.join(", ")}` : "")}`;
-
 export default function Home() {
   const couple = `${w.bride} & ${w.groom}`;
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
-    "--bg-top-sm": `url("${baseUrl}bg-top.webp")`,
-    "--bg-mid-sm": `url("${baseUrl}bg-mid.jpg")`,
-    "--bg-bottom-sm": `url("${baseUrl}bg-bottom.webp")`,
-    "--bg-top-lg": `url("${baseUrl}bg-top-lg.webp")`,
-    "--bg-mid-lg": `url("${baseUrl}bg-mid-lg.jpg")`,
-    "--bg-bottom-lg": `url("${baseUrl}bg-bottom-lg.webp")`,
+    "--card-background": `url("${baseUrl}file_000000000f7c820e8e89b6c3e094ed1c.png")`,
   } as CSSProperties;
 
   return (
@@ -61,42 +49,26 @@ export default function Home() {
 
           {/* ---------- Parents / invitation ---------- */}
           <section className="block parents-wrap">
-            <Reveal variant="right" delay={250} className="letter-slot letter-parents">
-              <OldLetter />
-            </Reveal>
-            <Reveal variant="up" className="paper parents">
-              <p className="verse">“{w.verse.text}”</p>
-              <p className="verse-ref">{w.verse.ref}</p>
-              <p className="caps small">{w.blessing}</p>
-              <div className="parents-cols">
-                {[w.parents.groom, w.parents.bride].map((p) => (
-                  <div key={p.label}>
-                    <p className="caps tiny">{p.label}</p>
-                    {p.names.map((n) => (
-                      <p key={n} className="parent-name">
-                        {n}
-                      </p>
-                    ))}
-                  </div>
-                ))}
-              </div>
-              <p className="script-names" aria-label={couple}>
-                <span className="sn sn-1">{w.bride}</span>
-                <span className="sn sn-amp">&amp;</span>
-                <span className="sn sn-2">{w.groom}</span>
-              </p>
-              <p className="invite-line">{w.inviteLine}</p>
-            </Reveal>
-            <Reveal variant="drop" delay={500} className="tag-slot tag-calendar">
-              <a href={calendarUrl} target="_blank" rel="noopener" className="tag-link">
-                <Tag>
-                  Add
-                  <br />to your
-                  <br />
-                  calendar
-                </Tag>
-              </a>
-            </Reveal>
+            <div className="couple-papers">
+              <Reveal variant="right" className="paper person-paper groom-paper">
+                <Image className="person-caricature" src={`${baseUrl}groom.webp`} alt="Caricature of Jason" width={113} height={330} unoptimized />
+                <h2 className="person-name">Jason Thomas George</h2>
+                <p className="person-family">
+                  S/O Mrs. Mary Thomas
+                  <span>and Shri Thomas George</span>
+                </p>
+                <p className="person-place">Cheppad, Aleppy, Kerala</p>
+              </Reveal>
+              <Reveal variant="left" delay={180} className="paper person-paper bride-paper">
+                <Image className="person-caricature" src={`${baseUrl}bride.webp`} alt="Caricature of Ashwini" width={176} height={331} unoptimized />
+                <h2 className="person-name">Ashwini Vichare</h2>
+                <p className="person-family">
+                  D/o of Mrs. Anagha Vichare
+                  <span>and Mr. Charudatta Krishna Vichare</span>
+                </p>
+                <p className="person-place">Varavde, Sangameshwar, Ratnagiri</p>
+              </Reveal>
+            </div>
           </section>
 
           {/* ---------- Calendar ---------- */}

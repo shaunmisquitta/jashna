@@ -376,24 +376,15 @@ export function ArchPainting({ className = "" }: { className?: string }) {
         <rect width="320" height="400" fill="url(#varnish)" opacity="0.6" />
         <rect width="320" height="400" filter="url(#grain)" opacity="0.4" />
 
-        <g className="couple" filter="url(#sticker)">
-          <g className="couple-bride">
-            <image href={`${import.meta.env.BASE_URL}bride.webp`} x="34" y="72" width="176" height="331" />
-          </g>
-          <g className="couple-groom">
-            <image href={`${import.meta.env.BASE_URL}groom.webp`} x="186" y="76" width="113" height="330" />
-          </g>
-        </g>
-
-        {/* the knot: a golden ribbon from her dupatta to his stole, tied between them */}
-        <g className="knot">
-          <path
-            className="knot-ribbon"
-            pathLength={1}
-            d="M150 212 C 162 222 174 222 186 208 C 196 198 208 198 222 206 M186 208 c -14 -18 -30 -6 -20 4 c 7 7 16 3 20 -4 c 5 -16 26 -14 20 0 c -4 8 -14 8 -20 0 M185 211 c -5 16 -12 30 -20 42 M187 211 c 5 16 13 28 21 38"
-          />
-          <circle className="knot-core" cx="186" cy="209" r="4.4" fill="url(#goldRibbon)" />
-        </g>
+        <image
+          className="couple-photo"
+          href={`${import.meta.env.BASE_URL}file_00000000eab081f49f1839326aa21c4b.png`}
+          x="0"
+          y="0"
+          width="320"
+          height="400"
+          preserveAspectRatio="xMidYMid slice"
+        />
       </g>
       <path d={archPath(16, 16, 288, 384)} fill="none" stroke="#260409" strokeOpacity="0.6" strokeWidth="2" />
     </svg>

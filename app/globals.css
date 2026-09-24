@@ -34,32 +34,17 @@ body {
   container-type: inline-size;
 }
 
-/* Full-bleed background: IMG_2733 cut into a top piece, a seamless repeating
-   middle band of vines and a bottom scene (see public/), each scaled to the
-   full screen width. The middle band starts where the top piece was cut
-   (1.0442 × the width). */
+/* Keep the portrait artwork continuous and edge-to-edge through the full
+   invitation at every viewport width. */
 .card {
-  --bg-top: var(--bg-top-sm);
-  --bg-mid: var(--bg-mid-sm);
-  --bg-bottom: var(--bg-bottom-sm);
   position: relative;
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
   background:
-    /* 30% parchment wash = the artwork at 70% opacity */
-    linear-gradient(rgb(241 223 198 / 0.3), rgb(241 223 198 / 0.3)),
-    var(--bg-top) top center / 100% auto no-repeat,
-    var(--bg-bottom) bottom center / 100% auto no-repeat,
-    var(--bg-mid) center calc(100cqw * 1.0442) / 100% auto repeat-y,
+    linear-gradient(rgb(241 223 198 / 0.12), rgb(241 223 198 / 0.12)) center / 100% 100% no-repeat,
+    var(--card-background) top center / 100% 100% no-repeat,
     var(--parchment);
-}
-@media (min-width: 700px) {
-  .card {
-    --bg-top: var(--bg-top-lg);
-    --bg-mid: var(--bg-mid-lg);
-    --bg-bottom: var(--bg-bottom-lg);
-  }
 }
 
 /* The invitation is designed at phone width; on larger screens the whole
@@ -377,7 +362,7 @@ body {
 }
 .title-word {
   display: block;
-  width: min(50cqw, 380px);
+  width: min(60cqw, 456px);
   height: auto;
   clip-path: inset(-5% 100% -5% 0);
 }
@@ -427,26 +412,8 @@ html.opened .hero-seal {
   animation: stamp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards;
 }
 
-/* the couple rise into the arch once it is out of the envelope, lean in
-   towards each other, then sway gently */
-.couple-bride,
-.couple-groom {
-  transform-box: fill-box;
-  transform-origin: 50% 100%;
-  transform: translateY(45%);
-  opacity: 0;
-}
-html.opened .hero-arch .couple-bride,
-.rsvp.is-in .couple-bride {
-  animation:
-    coupleRise 1.3s var(--ease) 1.5s forwards,
-    leanBride 5s ease-in-out 2.8s infinite;
-}
-html.opened .hero-arch .couple-groom,
-.rsvp.is-in .couple-groom {
-  animation:
-    coupleRise 1.3s var(--ease) 1.75s forwards,
-    leanGroom 5s ease-in-out 3.05s infinite;
+.couple-photo {
+  filter: drop-shadow(0 5px 8px rgb(45 20 12 / 0.3));
 }
 
 /* wedding scene life */
@@ -459,31 +426,6 @@ html.opened .hero-arch .couple-groom,
 .petal {
   animation: petalFall 9s linear infinite;
 }
-.knot-ribbon {
-  fill: none;
-  stroke: url(#goldRibbon);
-  stroke-width: 3.4;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 1;
-  filter: drop-shadow(0 1px 1px rgb(60 30 0 / 0.4));
-}
-.knot-core {
-  transform-box: fill-box;
-  transform-origin: center;
-  transform: scale(0);
-}
-html.opened .hero-arch .knot-ribbon,
-.rsvp.is-in .knot-ribbon {
-  transition: stroke-dashoffset 1.8s ease-in-out 3s;
-  stroke-dashoffset: 0;
-}
-html.opened .hero-arch .knot-core,
-.rsvp.is-in .knot-core {
-  animation: knotPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 4.5s forwards;
-}
-
 /* ================================================================ */
 /* Music player                                                      */
 /* ================================================================ */
@@ -684,89 +626,71 @@ html.opened .hero-arch .knot-core,
 /* ================================================================ */
 
 .parents-wrap {
-  margin-bottom: 90px;
+  width: 94%;
+  margin-bottom: 88px;
+  padding-top: 142px;
 }
-.parents {
-  --rot: -1deg;
-  z-index: 1;
-  width: 84%;
-  padding: 30px 20px 26px;
-  text-align: center;
-}
-.letter-parents {
-  --rot: 5deg;
-  top: 14%;
-  right: -7%;
-  width: 44%;
-  height: 72%;
-}
-.tag-calendar {
-  --rot: 4deg;
-  right: 0;
-  bottom: -70px;
-}
-.verse {
-  font-style: italic;
-  font-size: 14px;
-}
-.verse-ref {
-  font-size: 11px;
-  color: #7a6464;
-  margin-bottom: 14px;
-}
-.parents-cols {
+.couple-papers {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 12px 0 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 14px;
 }
-.parents-cols .caps {
-  color: var(--wine-ink);
-  margin-bottom: 3px;
-}
-.parent-name {
-  font-size: 11.5px;
-  line-height: 1.35;
-}
-.script-names {
-  font-family: var(--font-script);
-  color: var(--wine-ink);
-  font-size: 46px;
-  line-height: 0.95;
-  margin: 10px 0 6px;
-}
-.sn {
-  display: block;
-  padding: 0 0.25em;
-  clip-path: inset(0 100% 0 0);
-}
-.sn-1 {
-  text-align: left;
-  padding-left: 12%;
-}
-.sn-amp {
-  font-size: 0.6em;
-  margin: -0.35em 0 -0.25em 30%;
+.person-paper {
+  min-height: 270px;
+  padding: 108px 13px 22px;
   text-align: center;
 }
-.sn-2 {
-  text-align: right;
-  padding-right: 10%;
+.groom-paper {
+  --rot: -1.5deg;
 }
-.is-in .sn {
-  animation: write 1.4s ease-in-out 0.5s forwards;
+.bride-paper {
+  --rot: 1.5deg;
 }
-.is-in .sn-amp {
-  animation-delay: 1.5s;
-  animation-duration: 0.6s;
+.person-caricature {
+  position: absolute;
+  z-index: 1;
+  top: -132px;
+  left: 50%;
+  width: 94%;
+  height: 238px;
+  object-fit: contain;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 7px 7px rgb(50 25 20 / 0.2));
+  pointer-events: none;
 }
-.is-in .sn-2 {
-  animation-delay: 1.9s;
+.person-name {
+  position: relative;
+  z-index: 2;
+  min-height: 2.2em;
+  margin-bottom: 10px;
+  color: var(--wine-ink);
+  font-family: var(--font-script);
+  font-size: 25px;
+  line-height: 1.05;
 }
-.invite-line {
-  font-size: 14px;
-  max-width: 200px;
-  margin: 0 auto;
+.person-family {
+  position: relative;
+  z-index: 2;
+  min-height: 5.7em;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.person-family span {
+  display: block;
+}
+.person-place {
+  position: relative;
+  z-index: 2;
+  margin-top: 13px;
+  padding-top: 11px;
+  border-top: 1px solid rgb(94 23 38 / 0.24);
+  color: var(--wine-ink);
+  font-family: var(--font-display);
+  font-size: 12px;
+  line-height: 1.45;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 /* ================================================================ */
