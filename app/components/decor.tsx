@@ -378,10 +378,10 @@ export function ArchPainting({ className = "" }: { className?: string }) {
 
         <g className="couple" filter="url(#sticker)">
           <g className="couple-bride">
-            <image href="/couple/bride.webp" x="34" y="72" width="176" height="331" />
+            <image href="couple/bride.webp" x="34" y="72" width="176" height="331" />
           </g>
           <g className="couple-groom">
-            <image href="/couple/groom.webp" x="186" y="76" width="113" height="330" />
+            <image href="couple/groom.webp" x="186" y="76" width="113" height="330" />
           </g>
         </g>
 
