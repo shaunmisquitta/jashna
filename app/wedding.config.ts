@@ -67,6 +67,9 @@ export const wedding = {
   closing: {
     line: "We hope to celebrate with you",
     thanks: "Thank you!",
+    siblingMessage: "Come celebrate Ashwini and Jason with us and make their special day even more joyful. We can’t wait to welcome you!",
+    siblings: "Jacqueline & Rushikesh",
+    siblingRole: "With love, the bride and groom’s siblings",
   },
 };
 

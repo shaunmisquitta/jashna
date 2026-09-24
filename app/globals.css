@@ -34,16 +34,18 @@ body {
   container-type: inline-size;
 }
 
-/* Keep the portrait artwork continuous and edge-to-edge through the full
-   invitation at every viewport width. */
+/* Three-part edge-to-edge artwork: fixed top and bottom scenes surround a
+   vertically seamless floral middle that expands to any invitation length. */
 .card {
   position: relative;
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
   background:
-    linear-gradient(rgb(241 223 198 / 0.12), rgb(241 223 198 / 0.12)) center / 100% 100% no-repeat,
-    var(--card-background) top center / 100% 100% no-repeat,
+    linear-gradient(rgb(241 223 198 / 0.12), rgb(241 223 198 / 0.12)),
+    var(--card-bg-top) top center / 100% auto no-repeat,
+    var(--card-bg-bottom) bottom center / 100% auto no-repeat,
+    var(--card-bg-mid) center calc(100cqw * 1.105) / 100% auto repeat-y,
     var(--parchment);
 }
 
@@ -398,7 +400,7 @@ body {
 .title {
   display: flex;
   justify-content: center;
-  padding-top: 44cqw;
+  padding-top: clamp(32px, 10cqw, 46px);
 }
 @media (min-width: 700px) {
   .title {
@@ -706,8 +708,15 @@ html.opened .hero-seal {
   height: 238px;
   object-fit: contain;
   transform: translateX(-50%);
+  transform-origin: 50% 100%;
   filter: drop-shadow(0 7px 7px rgb(50 25 20 / 0.2));
   pointer-events: none;
+}
+.is-in.groom-paper .person-caricature {
+  animation: groomCharacterMove 4.8s ease-in-out infinite;
+}
+.is-in.bride-paper .person-caricature {
+  animation: brideCharacterMove 5.2s ease-in-out 0.35s infinite;
 }
 .person-name {
   position: relative;
@@ -1126,6 +1135,20 @@ html.opened .hero-seal {
 }
 .is-in .thanks {
   animation: heartbeat 2.4s ease-in-out 1.2s infinite;
+}
+.sibling-message {
+  margin: 16px auto 14px;
+  font-size: 15px;
+  line-height: 1.45;
+}
+.closing .sibling-names {
+  font-size: 28px;
+}
+.closing .sibling-role {
+  margin-top: 5px;
+  font-size: 7.5px;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
 }
 .fl-close {
   --r: -15deg;
@@ -1667,6 +1690,30 @@ html.opened .hero-seal {
   100% {
     opacity: 0;
     transform: translate3d(var(--drift), 118vh, 0) rotate(var(--spin)) scale(1.08);
+  }
+}
+@keyframes groomCharacterMove {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(-0.8deg);
+  }
+  45% {
+    transform: translateX(-50%) translateY(-7px) rotate(1.2deg);
+  }
+  70% {
+    transform: translateX(-50%) translateY(-3px) rotate(0.3deg);
+  }
+}
+@keyframes brideCharacterMove {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotate(0.8deg);
+  }
+  40% {
+    transform: translateX(-50%) translateY(-8px) rotate(-1.3deg);
+  }
+  72% {
+    transform: translateX(-50%) translateY(-2px) rotate(-0.2deg);
   }
 }
 @keyframes knotPop {

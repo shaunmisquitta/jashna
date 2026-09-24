@@ -12,7 +12,9 @@ import { FlowerShower } from "./components/FlowerShower";
 export default function Home() {
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
-    "--card-background": `url("${baseUrl}file_000000000f7c820e8e89b6c3e094ed1c.png")`,
+    "--card-bg-top": `url("${baseUrl}wedding-bg-top.webp")`,
+    "--card-bg-mid": `url("${baseUrl}wedding-bg-mid.webp")`,
+    "--card-bg-bottom": `url("${baseUrl}wedding-bg-bottom.webp")`,
   } as CSSProperties;
 
   return (
@@ -127,16 +129,15 @@ export default function Home() {
             <Reveal variant="up" className="paper closing">
               <p className="caps tiny">{w.closing.line}</p>
               <p className="script thanks">{w.closing.thanks}</p>
+              <p className="sibling-message">{w.closing.siblingMessage}</p>
+              <p className="script sibling-names">{w.closing.siblings}</p>
+              <p className="caps sibling-role">{w.closing.siblingRole}</p>
             </Reveal>
             <Anthurium className="fl fl-close" />
             <Anthurium className="fl fl-close2" />
           </section>
 
-          <footer className="foot">
-            <p className="credit">
-              Developed by <span>@shaunmisquitta</span>
-            </p>
-          </footer>
+       
           </div>
         </article>
       </main>

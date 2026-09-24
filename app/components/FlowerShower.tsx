@@ -1,13 +1,18 @@
 import type { CSSProperties } from "react";
 
-const blossoms = Array.from({ length: 500 }, (_, index) => ({
-  left: (index * 37) % 101,
-  duration: 4.8 + ((index * 13) % 27) / 10,
-  drift: ((index * 29) % 51) - 25,
-  delay: ((index * 17) % 120) / 100,
-  size: 24 + ((index * 17) % 49),
-  spin: 720 + ((index * 97) % 900),
-}));
+const blossoms = Array.from({ length: 200 }, (_, index) => {
+  const duration = 5.8 + ((index * 13) % 32) / 10;
+  const verticalPhase = ((index * 47) % 96) / 100;
+
+  return {
+    left: (index * 37) % 101,
+    duration,
+    drift: ((index * 29) % 51) - 25,
+    delay: -(duration * verticalPhase),
+    size: 24 + ((index * 17) % 49),
+    spin: 720 + ((index * 97) % 900),
+  };
+});
 
 type FlowerStyle = CSSProperties & Record<`--${string}`, string>;
 
