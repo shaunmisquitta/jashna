@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 /* A gentle music-box arpeggio (Pachelbel-style progression) synthesised with
    Web Audio. Used whenever the real song file can't be played. */
@@ -23,8 +24,12 @@ class MusicBox {
   constructor() {
     this.ctx = new AudioContext();
     this.out = this.ctx.createGain();
-    this.out.gain.value = 0.18;
+    this.out.gain.value = 0.09;
     this.out.connect(this.ctx.destination);
+  }
+
+  setVolume(volume: number) {
+    this.out.gain.value = 0.18 * volume;
   }
 
   note(midi: number, when: number, vol = 1) {
@@ -92,13 +97,18 @@ export function MusicPlayer({ src }: { src: string }) {
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState({ pos: 0, dur: MusicBox.loopLength });
   const [loop, setLoop] = useState(true);
+  const [volume, setVolume] = useState(0.5);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   const startSynth = useCallback(() => {
     useSynth.current = true;
     boxRef.current ??= new MusicBox();
+    boxRef.current.setVolume(volume);
     boxRef.current.play();
     setPlaying(true);
-  }, []);
+  }, [volume]);
 
   const play = useCallback(() => {
     const audio = audioRef.current;
@@ -110,6 +120,20 @@ export function MusicPlayer({ src }: { src: string }) {
     if (useSynth.current) boxRef.current?.pause();
     else audioRef.current?.pause();
     setPlaying(false);
+  }, []);
+
+  useEffect(() => {
+    if (audioRef.current) audioRef.current.volume = volume;
+    boxRef.current?.setVolume(volume);
+  }, [volume]);
+
+  // Browsers that permit audible autoplay will start immediately. If autoplay
+  // is blocked, opening the invitation provides the user gesture needed to play.
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.volume = 0.5;
+    void audio.play().then(() => setPlaying(true), () => undefined);
   }, []);
 
   // Start music when the intro envelope is opened.
@@ -138,7 +162,14 @@ export function MusicPlayer({ src }: { src: string }) {
 
   const pct = time.dur ? Math.min(100, (time.pos / time.dur) * 100) : 0;
 
+  const playPauseIcon = playing ? (
+    <svg viewBox="0 0 24 24" aria-hidden><path d="M8 6h3v12H8zM13 6h3v12h-3z" className="fill" /></svg>
+  ) : (
+    <svg viewBox="0 0 24 24" aria-hidden><path d="M9 6.5v11l9-5.5z" className="fill" /></svg>
+  );
+
   return (
+    <>
     <div className={`player ${playing ? "is-playing" : ""}`}>
       <audio
         ref={audioRef}
@@ -176,11 +207,7 @@ export function MusicPlayer({ src }: { src: string }) {
           aria-label={playing ? "Pause" : "Play"}
           onClick={playing ? pause : play}
         >
-          {playing ? (
-            <svg viewBox="0 0 24 24"><path d="M8 6h3v12H8zM13 6h3v12h-3z" className="fill" /></svg>
-          ) : (
-            <svg viewBox="0 0 24 24"><path d="M9 6.5v11l9-5.5z" className="fill" /></svg>
-          )}
+          {playPauseIcon}
         </button>
         <button type="button" aria-label="Next" onClick={restart}>
           <svg viewBox="0 0 24 24"><path d="m6 5 10 7-10 7zM17 5h2v14h-2z" className="fill" /></svg>
@@ -196,5 +223,34 @@ export function MusicPlayer({ src }: { src: string }) {
         </button>
       </div>
     </div>
+    {mounted && createPortal(
+      <div className="floating-audio-controls">
+        <label className="floating-volume">
+          <svg viewBox="0 0 24 24" aria-hidden>
+            <path d="M4 9v6h4l5 4V5L8 9H4zm12 1a3 3 0 0 1 0 4m2.5-6.5a6.4 6.4 0 0 1 0 9" />
+          </svg>
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume}
+            aria-label="Music volume"
+            onChange={(event) => setVolume(Number(event.target.value))}
+          />
+        </label>
+        <button
+          type="button"
+          className={`floating-music ${playing ? "is-playing" : ""}`}
+          aria-label={playing ? "Pause music" : "Play music"}
+          aria-pressed={playing}
+          onClick={playing ? pause : play}
+        >
+          {playPauseIcon}
+        </button>
+      </div>,
+      document.body,
+    )}
+    </>
   );
 }

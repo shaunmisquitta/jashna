@@ -18,13 +18,14 @@ const calendarUrl =
 
 export default function Home() {
   const couple = `${w.bride} & ${w.groom}`;
+  const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
-    "--bg-top-sm": 'url("bg-top.webp")',
-    "--bg-mid-sm": 'url("bg-mid.jpg")',
-    "--bg-bottom-sm": 'url("bg-bottom.webp")',
-    "--bg-top-lg": 'url("bg-top-lg.webp")',
-    "--bg-mid-lg": 'url("bg-mid-lg.jpg")',
-    "--bg-bottom-lg": 'url("bg-bottom-lg.webp")',
+    "--bg-top-sm": `url("${baseUrl}bg-top.webp")`,
+    "--bg-mid-sm": `url("${baseUrl}bg-mid.jpg")`,
+    "--bg-bottom-sm": `url("${baseUrl}bg-bottom.webp")`,
+    "--bg-top-lg": `url("${baseUrl}bg-top-lg.webp")`,
+    "--bg-mid-lg": `url("${baseUrl}bg-mid-lg.jpg")`,
+    "--bg-bottom-lg": `url("${baseUrl}bg-bottom-lg.webp")`,
   } as CSSProperties;
 
   return (
@@ -53,7 +54,7 @@ export default function Home() {
           {/* ---------- Music ---------- */}
           <Reveal className="block player-wrap" variant="up">
             <div className="paper">
-              <MusicPlayer src={w.songUrl} />
+              <MusicPlayer src={`${baseUrl}${w.songUrl}`} />
             </div>
             <Anthurium className="fl fl-player" />
           </Reveal>

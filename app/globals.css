@@ -584,6 +584,74 @@ html.opened .hero-arch .knot-core,
   fill: currentColor;
   stroke: none;
 }
+.floating-audio-controls {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.floating-volume {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid rgb(216 182 109 / 0.8);
+  border-radius: 999px;
+  color: #fff8e8;
+  background: rgb(77 12 24 / 0.94);
+  box-shadow: 0 4px 16px rgb(50 12 22 / 0.28);
+}
+.floating-volume svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.floating-volume input {
+  width: 92px;
+  accent-color: #d8b66d;
+  cursor: pointer;
+}
+.floating-music {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  place-items: center;
+  border: 2px solid #d8b66d;
+  border-radius: 50%;
+  color: #fff8e8;
+  background: var(--wine-ink);
+  box-shadow: 0 6px 20px rgb(50 12 22 / 0.35);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.floating-music:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgb(50 12 22 / 0.42);
+}
+.floating-music:active {
+  transform: scale(0.92);
+}
+.floating-music:focus-visible {
+  outline: 3px solid rgb(216 182 109 / 0.5);
+  outline-offset: 3px;
+}
+.floating-music svg {
+  width: 25px;
+  height: 25px;
+}
+.floating-music .fill {
+  fill: currentColor;
+}
+.floating-music.is-playing {
+  animation: musicPulse 2.4s ease-in-out infinite;
+}
 .pc-small {
   opacity: 0.55;
 }
@@ -1632,6 +1700,10 @@ html.opened .hero-arch .knot-core,
   to {
     height: 14px;
   }
+}
+@keyframes musicPulse {
+  0%, 100% { box-shadow: 0 6px 20px rgb(50 12 22 / 0.35); }
+  50% { box-shadow: 0 6px 26px rgb(216 182 109 / 0.62); }
 }
 @keyframes ring {
   from {
