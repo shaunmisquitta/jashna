@@ -1,69 +1,202 @@
-import Image from "next/image";
+import type { CSSProperties } from "react";
+import { wedding as w } from "./wedding.config";
+import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, OldLetter, SmallEnvelope, SvgDefs, Tag, WaxSeal } from "./components/decor";
+import { Reveal } from "./components/Reveal";
+import { Intro } from "./components/Intro";
+import { MusicPlayer } from "./components/MusicPlayer";
+import { Countdown } from "./components/Countdown";
+import { Calendar } from "./components/Calendar";
+import { RsvpModal } from "./components/Modal";
+
+const reception = w.events.find((e) => e.name === "Reception");
+const gcalDate = (iso: string) => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, "");
+const calendarUrl =
+  "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+  `&text=${encodeURIComponent(`${w.bride} & ${w.groom}’s Wedding`)}` +
+  `&dates=${gcalDate(w.date)}/${gcalDate(w.endDate)}` +
+  `&location=${encodeURIComponent(reception ? `${reception.venue}, ${reception.address.join(", ")}` : "")}`;
 
 export default function Home() {
+  const couple = `${w.bride} & ${w.groom}`;
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <SvgDefs />
+      <Intro bride={w.bride} groom={w.groom} monogram={w.monogram} />
+
+      <main className="stage">
+        <article className="card">
+          {/* Title sits outside the scaled column so it can be placed against the full-width artwork */}
+          <header className="title">
+            <h1>
+              <JashnaLettering className="title-word" />
+            </h1>
+          </header>
+          <div className="column">
+          {/* ---------- Hero envelope ---------- */}
+
+          <section className="hero" aria-label="Invitation">
+            <div className="hero-back" />
+            <ArchPainting className="hero-arch" />
+            <EnvelopePocket className="hero-pocket" />
+            <WaxSeal monogram={w.monogram} className="hero-seal" />
+          </section>
+
+          {/* ---------- Music ---------- */}
+          <Reveal className="block player-wrap" variant="up">
+            <div className="paper">
+              <MusicPlayer src={w.songUrl} />
+            </div>
+            <Anthurium className="fl fl-player" />
+          </Reveal>
+
+          {/* ---------- Parents / invitation ---------- */}
+          <section className="block parents-wrap">
+            <Reveal variant="right" delay={250} className="letter-slot letter-parents">
+              <OldLetter />
+            </Reveal>
+            <Reveal variant="up" className="paper parents">
+              <p className="verse">“{w.verse.text}”</p>
+              <p className="verse-ref">{w.verse.ref}</p>
+              <p className="caps small">{w.blessing}</p>
+              <div className="parents-cols">
+                {[w.parents.groom, w.parents.bride].map((p) => (
+                  <div key={p.label}>
+                    <p className="caps tiny">{p.label}</p>
+                    {p.names.map((n) => (
+                      <p key={n} className="parent-name">
+                        {n}
+                      </p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <p className="script-names" aria-label={couple}>
+                <span className="sn sn-1">{w.bride}</span>
+                <span className="sn sn-amp">&amp;</span>
+                <span className="sn sn-2">{w.groom}</span>
+              </p>
+              <p className="invite-line">{w.inviteLine}</p>
+            </Reveal>
+            <Reveal variant="drop" delay={500} className="tag-slot tag-calendar">
+              <a href={calendarUrl} target="_blank" rel="noopener" className="tag-link">
+                <Tag>
+                  Add
+                  <br />to your
+                  <br />
+                  calendar
+                </Tag>
+              </a>
+            </Reveal>
+          </section>
+
+          {/* ---------- Calendar ---------- */}
+          <section className="block cal-wrap">
+            <Reveal variant="up" className="paper cal-paper">
+              <p className="quote">{w.storyQuote}</p>
+              <Calendar date={w.date} />
+            </Reveal>
+            <Anthurium className="fl fl-cal" />
+            <Anthurium className="fl fl-cal2" />
+          </section>
+
+          {/* ---------- Events ---------- */}
+          <section className="block events-wrap">
+            <Reveal variant="drop" className="env-slot">
+              <SmallEnvelope monogram={w.monogram} />
+            </Reveal>
+            <div className="events">
+              {w.events.map((e, i) => (
+                <Reveal
+                  key={e.name}
+                  variant={i % 2 ? "right" : "left"}
+                  delay={150 + i * 200}
+                  className={`paper event event-${e.icon}`}
+                >
+                  <Icon name={e.icon} className="event-icon" />
+                  <h2 className="event-name">{e.name}</h2>
+                  <p className="event-date">{e.date}</p>
+                  <p className="event-time">{e.time}</p>
+                  <span className="event-rule" />
+                  <p className="event-venue">{e.venue}</p>
+                  {e.address.map((a) => (
+                    <p key={a} className="event-address">
+                      {a}
+                    </p>
+                  ))}
+                  <a className="btn btn-outline" href={e.mapsUrl} target="_blank" rel="noopener">
+                    View location
+                  </a>
+                </Reveal>
+              ))}
+            </div>
+          </section>
+
+          {/* ---------- Itinerary ---------- */}
+          <section className="block itin-wrap">
+            <Reveal variant="left" delay={200} className="letter-slot letter-itin">
+              <OldLetter />
+            </Reveal>
+            <Reveal variant="up" className="itinerary">
+              <h2 className="itin-title">Itinerary</h2>
+              <ol className="timeline">
+                {w.itinerary.map((item, i) => (
+                  <li key={item.time} className={i % 2 ? "is-flip" : ""} style={{ "--i": i } as CSSProperties}>
+                    <span className="tl-icon">
+                      <Icon name={item.icon} />
+                    </span>
+                    <span className="tl-dot" />
+                    <span className="tl-text">
+                      <span className="tl-time">{item.time}</span>
+                      <span className="tl-label">{item.label}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </Reveal>
+            <WaxSeal monogram={w.monogram} className="float-seal seal-itin" />
+          </section>
+
+          {/* ---------- Countdown ---------- */}
+          <section className="block cd-wrap">
+            <Reveal variant="zoom" className="paper cd-paper">
+              <h2 className="cd-title">Countdown</h2>
+              <Countdown date={w.date} />
+            </Reveal>
+            <Anthurium className="fl fl-cd" />
+          </section>
+
+          {/* ---------- RSVP ---------- */}
+          <Reveal as="section" variant="fade" className="block rsvp">
+            <div className="rsvp-back" />
+            <ArchPainting className="rsvp-arch" />
+            <div className="rsvp-card">
+              <h2 className="section-title">RSVP</h2>
+              <p>Kindly confirm your attendance by {w.rsvp.deadline}.</p>
+              <RsvpModal deadline={w.rsvp.deadline} whatsapp={w.rsvp.whatsapp} couple={couple} />
+            </div>
+            <EnvelopePocket className="rsvp-pocket" />
+            <WaxSeal monogram={w.monogram} className="rsvp-seal" />
+          </Reveal>
+
+          {/* ---------- Closing ---------- */}
+          <section className="block closing-wrap">
+            <Reveal variant="up" className="paper closing">
+              <p className="caps tiny">{w.closing.line}</p>
+              <p className="script thanks">{w.closing.thanks}</p>
+            </Reveal>
+            <Anthurium className="fl fl-close" />
+            <Anthurium className="fl fl-close2" />
+          </section>
+
+          <footer className="foot">
+            <p className="credit">
+              Developed by <span>@shaunmisquitta</span>
+            </p>
+          </footer>
+          </div>
+        </article>
       </main>
-    </div>
+    </>
   );
 }
