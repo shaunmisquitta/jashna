@@ -73,32 +73,16 @@ body {
   width: var(--size);
   height: var(--size);
   opacity: 0;
-  filter: drop-shadow(0 3px 3px rgb(63 30 22 / 0.22));
+  will-change: transform, opacity;
 }
 .opened .falling-flower {
-  animation: flowerFall var(--duration) cubic-bezier(0.25, 0.55, 0.45, 0.95) var(--delay) forwards;
+  animation: flowerFall var(--duration) linear var(--delay) forwards;
 }
 .falling-flower svg {
   display: block;
   width: 100%;
   overflow: visible;
 }
-.falling-flower {
-  color: #f4b928;
-}
-.falling-flower use {
-  fill: currentColor;
-}
-.sunflower-1 {
-  color: #ffd84a;
-}
-.sunflower-2 {
-  color: #e9a61e;
-}
-.sunflower-3 {
-  color: #ffca32;
-}
-
 /* The invitation is designed at phone width; on larger screens the whole
    column is scaled up proportionally so every piece keeps its composition. */
 .column {
@@ -1683,6 +1667,15 @@ html.opened .hero-seal {
   }
   8% {
     opacity: 0.95;
+  }
+  28% {
+    transform: translate3d(var(--sway), 30vh, 0) rotate(var(--spin-a)) scale(0.9);
+  }
+  55% {
+    transform: translate3d(var(--sway-back), 65vh, 0) rotate(var(--spin-b)) scale(1);
+  }
+  76% {
+    transform: translate3d(var(--sway), 91vh, 0) rotate(var(--spin-c)) scale(1.04);
   }
   82% {
     opacity: 0.9;
