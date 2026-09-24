@@ -89,11 +89,13 @@ class MusicBox {
 }
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+const SONG_START_SECONDS = 74;
 
 export function MusicPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const boxRef = useRef<MusicBox | null>(null);
   const useSynth = useRef(false);
+  const startApplied = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState({ pos: 0, dur: MusicBox.loopLength });
   const [loop, setLoop] = useState(true);
@@ -110,11 +112,20 @@ export function MusicPlayer({ src }: { src: string }) {
     setPlaying(true);
   }, [volume]);
 
+  const seekToSongStart = useCallback((audio: HTMLAudioElement) => {
+    if (startApplied.current || !Number.isFinite(audio.duration)) return;
+    const start = Math.min(SONG_START_SECONDS, Math.max(0, audio.duration - 0.1));
+    audio.currentTime = start;
+    startApplied.current = true;
+    setTime({ pos: start, dur: audio.duration });
+  }, []);
+
   const play = useCallback(() => {
     const audio = audioRef.current;
     if (useSynth.current || !audio) return startSynth();
+    seekToSongStart(audio);
     audio.play().then(() => setPlaying(true), startSynth);
-  }, [startSynth]);
+  }, [seekToSongStart, startSynth]);
 
   const pause = useCallback(() => {
     if (useSynth.current) boxRef.current?.pause();
@@ -133,8 +144,9 @@ export function MusicPlayer({ src }: { src: string }) {
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.5;
+    seekToSongStart(audio);
     void audio.play().then(() => setPlaying(true), () => undefined);
-  }, []);
+  }, [seekToSongStart]);
 
   // Start music when the intro envelope is opened.
   useEffect(() => {
@@ -156,8 +168,8 @@ export function MusicPlayer({ src }: { src: string }) {
 
   const restart = () => {
     if (useSynth.current) boxRef.current?.restart();
-    else if (audioRef.current) audioRef.current.currentTime = 0;
-    setTime((t) => ({ ...t, pos: 0 }));
+    else if (audioRef.current) audioRef.current.currentTime = SONG_START_SECONDS;
+    setTime((t) => ({ ...t, pos: useSynth.current ? 0 : SONG_START_SECONDS }));
   };
 
   const pct = time.dur ? Math.min(100, (time.pos / time.dur) * 100) : 0;
@@ -176,8 +188,13 @@ export function MusicPlayer({ src }: { src: string }) {
         src={src}
         preload="metadata"
         loop={loop}
+        onLoadedMetadata={(event) => seekToSongStart(event.currentTarget)}
         onError={() => (useSynth.current = true)}
-        onTimeUpdate={(e) => setTime({ pos: e.currentTarget.currentTime, dur: e.currentTarget.duration || 1 })}
+        onTimeUpdate={(event) => {
+          const audio = event.currentTarget;
+          if (loop && startApplied.current && audio.currentTime < 1) audio.currentTime = SONG_START_SECONDS;
+          setTime({ pos: audio.currentTime, dur: audio.duration || 1 });
+        }}
         onEnded={() => setPlaying(false)}
       />
       <p className="player-title">Press play to hear our song</p>

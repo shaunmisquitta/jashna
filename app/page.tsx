@@ -1,16 +1,15 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { wedding as w } from "./wedding.config";
-import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, OldLetter, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
+import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
 import { Reveal } from "./components/Reveal";
 import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
 import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
-import { RsvpModal } from "./components/Modal";
+import { FlowerShower } from "./components/FlowerShower";
 
 export default function Home() {
-  const couple = `${w.bride} & ${w.groom}`;
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
     "--card-background": `url("${baseUrl}file_000000000f7c820e8e89b6c3e094ed1c.png")`,
@@ -20,6 +19,7 @@ export default function Home() {
     <>
       <SvgDefs />
       <Intro bride={w.bride} groom={w.groom} monogram={w.monogram} />
+      <FlowerShower />
 
       <main className="stage">
         <article className="card" style={cardBackgrounds}>
@@ -71,6 +71,15 @@ export default function Home() {
             </div>
           </section>
 
+          {/* ---------- Countdown ---------- */}
+          <section className="block cd-wrap">
+            <Reveal variant="zoom" className="paper cd-paper">
+              <h2 className="cd-title">Countdown</h2>
+              <Countdown date={w.date} />
+            </Reveal>
+            <Anthurium className="fl fl-cd" />
+          </section>
+
           {/* ---------- Calendar ---------- */}
           <section className="block cal-wrap">
             <Reveal variant="up" className="paper cal-paper">
@@ -112,53 +121,6 @@ export default function Home() {
               ))}
             </div>
           </section>
-
-          {/* ---------- Itinerary ---------- */}
-          <section className="block itin-wrap">
-            <Reveal variant="left" delay={200} className="letter-slot letter-itin">
-              <OldLetter />
-            </Reveal>
-            <Reveal variant="up" className="itinerary">
-              <h2 className="itin-title">Itinerary</h2>
-              <ol className="timeline">
-                {w.itinerary.map((item, i) => (
-                  <li key={item.time} className={i % 2 ? "is-flip" : ""} style={{ "--i": i } as CSSProperties}>
-                    <span className="tl-icon">
-                      <Icon name={item.icon} />
-                    </span>
-                    <span className="tl-dot" />
-                    <span className="tl-text">
-                      <span className="tl-time">{item.time}</span>
-                      <span className="tl-label">{item.label}</span>
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </Reveal>
-            <WaxSeal monogram={w.monogram} className="float-seal seal-itin" />
-          </section>
-
-          {/* ---------- Countdown ---------- */}
-          <section className="block cd-wrap">
-            <Reveal variant="zoom" className="paper cd-paper">
-              <h2 className="cd-title">Countdown</h2>
-              <Countdown date={w.date} />
-            </Reveal>
-            <Anthurium className="fl fl-cd" />
-          </section>
-
-          {/* ---------- RSVP ---------- */}
-          <Reveal as="section" variant="fade" className="block rsvp">
-            <div className="rsvp-back" />
-            <ArchPainting className="rsvp-arch" />
-            <div className="rsvp-card">
-              <h2 className="section-title">RSVP</h2>
-              <p>Kindly confirm your attendance by {w.rsvp.deadline}.</p>
-              <RsvpModal deadline={w.rsvp.deadline} whatsapp={w.rsvp.whatsapp} couple={couple} />
-            </div>
-            <EnvelopePocket className="rsvp-pocket" />
-            <WaxSeal monogram={w.monogram} className="rsvp-seal" />
-          </Reveal>
 
           {/* ---------- Closing ---------- */}
           <section className="block closing-wrap">

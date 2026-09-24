@@ -12,7 +12,7 @@ export const wedding = {
   endDate: "2026-11-15T17:00:00+05:30",
 
   // Drop an mp3 at public/song.mp3. Until then a soft music-box melody plays instead.
-  songUrl: "song.mp3",
+  songUrl: "song.mpeg",
 
   verse: {
     text: "Set me as a seal upon your heart.",
