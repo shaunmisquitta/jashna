@@ -297,7 +297,7 @@ function Rose({ x, y, r, c, leaf }: { x: number; y: number; r: number; c: string
 
 export function ArchPainting({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 320 400" className={`arch ${className}`} aria-hidden>
+    <svg viewBox="0 0 320 400" className={`arch ${className}`} overflow="hidden" aria-hidden>
       <path d={archPath(0, 0, 320, 400)} fill="url(#wineFrame)" />
       <g clipPath="url(#archInner)">
         {/* warm candle-lit backdrop */}
@@ -376,7 +376,7 @@ export function ArchPainting({ className = "" }: { className?: string }) {
         <rect width="320" height="400" fill="url(#varnish)" opacity="0.6" />
         <rect width="320" height="400" filter="url(#grain)" opacity="0.4" />
 
-        <foreignObject x="0" y="0" width="320" height="400">
+        <foreignObject className="couple-foreign" x="0" y="0" width="320" height="400" overflow="hidden">
           <video className="couple-video" autoPlay muted loop playsInline aria-label="Wedding video">
             <source src={`${import.meta.env.BASE_URL}video.mp4`} type="video/mp4" />
           </video>

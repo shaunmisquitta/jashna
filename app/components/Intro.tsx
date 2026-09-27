@@ -66,7 +66,16 @@ export function Intro({ bride, groom, monogram }: { bride: string; groom: string
   const [stage, setStage] = useState<Stage>("closed");
 
   useEffect(() => {
+    document.documentElement.classList.add("intro-active");
+    return () => document.documentElement.classList.remove("intro-active");
+  }, []);
+
+  useEffect(() => {
     if (stage === "closed") return;
+    if (stage === "gone") {
+      document.documentElement.classList.remove("intro-active");
+      return;
+    }
     document.documentElement.classList.add("opened");
     const timer = setTimeout(() => setStage("gone"), CURTAIN_OPEN_MS + REVEAL_BUFFER_MS);
     return () => clearTimeout(timer);
@@ -88,11 +97,11 @@ export function Intro({ bride, groom, monogram }: { bride: string; groom: string
         type="button"
         className="curtain-trigger"
         onClick={open}
-        onTouchStart={(event) => event.preventDefault()}
-        onTouchEnd={(event) => {
+        onTouchStart={(event) => {
           event.preventDefault();
           open();
         }}
+        onTouchMove={(event) => event.preventDefault()}
         aria-label="Open invitation"
       >
         <span className="curtain-stage-light" aria-hidden="true" />
