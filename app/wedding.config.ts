@@ -30,7 +30,7 @@ export const wedding = {
   // Shown side by side.
   events: [
     {
-      name: "Haldi",
+      name: "Haldi & Cocktail",
       icon: "haldi",
       date: "Friday, 13 November 2026",
       time: "6:00 p.m. onwards",
@@ -39,7 +39,7 @@ export const wedding = {
       mapsUrl: "https://maps.app.goo.gl/qYDcsUjAgw5S6LBV6",
     },
     {
-      name: "Reception",
+      name: "Wedding & Reception",
       icon: "reception",
       date: "Sunday, 15 November 2026",
       time: "12:00 p.m. onwards",

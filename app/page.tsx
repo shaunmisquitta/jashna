@@ -7,21 +7,21 @@ import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
 import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
-import { FlowerShower } from "./components/FlowerShower";
 
 export default function Home() {
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
-    "--card-bg-top": `url("${baseUrl}wedding-bg-top.webp")`,
-    "--card-bg-mid": `url("${baseUrl}wedding-bg-mid.webp")`,
-    "--card-bg-bottom": `url("${baseUrl}wedding-bg-bottom.webp")`,
+    backgroundImage: `url("${baseUrl}wedding_background_460x2864.png")`,
+    backgroundPosition: "top center",
+    backgroundSize: "100% 100%",
+    backgroundRepeat: "no-repeat",
+    backgroundColor: "var(--parchment)",
   } as CSSProperties;
 
   return (
     <>
       <SvgDefs />
       <Intro bride={w.bride} groom={w.groom} monogram={w.monogram} />
-      <FlowerShower />
 
       <main className="stage">
         <article className="card" style={cardBackgrounds}>
@@ -57,13 +57,13 @@ export default function Home() {
                 <h2 className="person-name">Jason Thomas George</h2>
                 <p className="person-family">
                   S/O Mrs. Mary Thomas
-                  <span>and Shri Thomas George</span>
+                  <span>and Mr Thomas George</span>
                 </p>
                 <p className="person-place">Cheppad, Aleppy, Kerala</p>
               </Reveal>
               <Reveal variant="left" delay={180} className="paper person-paper bride-paper">
                 <Image className="person-caricature" src={`${baseUrl}bride.webp`} alt="Caricature of Ashwini" width={176} height={331} unoptimized />
-                <h2 className="person-name">Ashwini Vichare</h2>
+                <h2 className="person-name">Ashwini Charudatta Vichare</h2>
                 <p className="person-family">
                   D/o of Mrs. Anagha Vichare
                   <span>and Mr. Charudatta Krishna Vichare</span>

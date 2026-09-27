@@ -16,6 +16,12 @@ html:not(.opened) body {
   overflow: hidden;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   background: var(--parchment);
   color: var(--ink);
@@ -34,19 +40,16 @@ body {
   container-type: inline-size;
 }
 
-/* Three-part edge-to-edge artwork: fixed top and bottom scenes surround a
-   vertically seamless floral middle that expands to any invitation length. */
+/* One full-height invitation artwork stretched edge to edge without tiling. */
 .card {
   position: relative;
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background:
-    linear-gradient(rgb(241 223 198 / 0.12), rgb(241 223 198 / 0.12)),
-    var(--card-bg-top) top center / 100% auto no-repeat,
-    var(--card-bg-bottom) bottom center / 100% auto no-repeat,
-    var(--card-bg-mid) center calc(100cqw * 1.105) / 100% auto repeat-y,
-    var(--parchment);
+  background-color: var(--parchment);
+  background-position: top center;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
 /* A short flower shower celebrates the envelope opening, then clears away. */
@@ -448,7 +451,14 @@ html.opened .hero-seal {
   animation: stamp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards;
 }
 
-.couple-photo {
+.couple-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #fff;
+  transform: scale(1.08);
+  transform-origin: center;
   filter: drop-shadow(0 5px 8px rgb(45 20 12 / 0.3));
 }
 
@@ -1208,19 +1218,6 @@ html.opened .hero-seal {
 .intro-names span {
   font-size: 0.7em;
 }
-.intro-hint {
-  font-family: var(--font-display);
-  font-size: 10px;
-  letter-spacing: 0.35em;
-  text-transform: uppercase;
-  color: rgb(240 220 190 / 0.8);
-  animation: breathe 2.2s ease-in-out infinite;
-  transition: opacity 0.4s;
-}
-.intro:not(.intro-closed) .intro-hint {
-  opacity: 0;
-  animation: none;
-}
 .intro-env {
   position: relative;
   width: min(82vw, 360px);
@@ -1326,6 +1323,345 @@ html.opened .hero-seal {
   animation: none;
   opacity: 0;
   transform: translate(-50%, -50%) scale(1.5) rotate(25deg);
+}
+
+/* The opening screen uses two full-height fabric panels that part horizontally. */
+.intro {
+  --curtain-duration: 1.9s;
+  --curtain-ease: cubic-bezier(0.55, 0, 0.15, 1);
+  --curtain-velvet: #641022;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  background: transparent;
+}
+.curtain-trigger {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  zoom: 1 !important;
+}
+.intro-closed .curtain-trigger {
+  background: var(--curtain-velvet);
+}
+.intro-opening .curtain-trigger {
+  background: rgb(45 2 12 / 0);
+  transition: background 1.4s ease 0.25s;
+  cursor: default;
+  pointer-events: none;
+}
+.curtain-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.curtain {
+  position: absolute;
+  top: -5vh;
+  bottom: -5vh;
+  z-index: 1;
+  display: block;
+  width: 50.5%;
+  background-image: url("/curtain-fabric.png");
+  background-repeat: no-repeat;
+  background-size: 200% 110%;
+  box-shadow: 0 0 30px rgb(0 0 0 / 0.55);
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  overflow: hidden;
+}
+.curtain-left {
+  left: 0;
+  background-position: left center;
+  clip-path: polygon(0 0, 100% 0, 99.2% 12%, 100% 27%, 98.7% 43%, 100% 58%, 99% 76%, 100% 100%, 0 100%);
+  border-radius: 0 1.5vw 2.5vw 0 / 0 4vh 7vh 0;
+  transform-origin: left center;
+}
+.curtain-right {
+  right: 0;
+  background-position: right center;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 1% 76%, 0 58%, 1.3% 43%, 0 27%, 0.8% 12%);
+  border-radius: 1.5vw 0 0 2.5vw / 4vh 0 0 7vh;
+  transform-origin: right center;
+}
+.curtain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    linear-gradient(90deg, rgb(255 225 215 / 0.12), transparent 38%, rgb(20 0 5 / 0.24)),
+    radial-gradient(ellipse at 50% 18%, rgb(255 211 160 / 0.13), transparent 45%);
+  mix-blend-mode: screen;
+  animation: fabricBreathe 4.5s ease-in-out infinite alternate;
+}
+.curtain::after {
+  content: "";
+  position: absolute;
+  z-index: 3;
+  right: -8%;
+  bottom: -3%;
+  left: -8%;
+  height: 12%;
+  border-radius: 50% 50% 0 0;
+  background:
+    radial-gradient(ellipse at 18% 75%, rgb(255 210 205 / 0.15), transparent 24%),
+    radial-gradient(ellipse at 48% 75%, rgb(20 0 6 / 0.28), transparent 27%),
+    radial-gradient(ellipse at 78% 75%, rgb(255 210 205 / 0.13), transparent 25%);
+  filter: blur(2px);
+}
+.curtain-valance {
+  display: none;
+}
+.curtain-folds {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  overflow: hidden;
+  pointer-events: none;
+}
+.curtain-fold {
+  position: relative;
+  display: block;
+  flex: 1 0 12.5%;
+  height: 100%;
+  transform-origin: top center;
+  background:
+    linear-gradient(90deg, rgb(12 0 4 / 0.55), rgb(255 218 203 / 0.22) 42%, rgb(28 0 8 / 0.48) 82%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05), transparent 30%, rgb(15 0 5 / 0.12));
+  mix-blend-mode: overlay;
+  will-change: transform;
+}
+.curtain-fold:nth-child(2n) {
+  background: linear-gradient(90deg, rgb(255 225 215 / 0.16), rgb(35 0 8 / 0.38) 55%, rgb(255 225 215 / 0.1));
+  transform: scaleX(0.88);
+}
+.intro-opening .curtain-fold {
+  animation: flowingFold 520ms ease-in-out infinite alternate;
+}
+.intro-opening .curtain-fold:nth-child(2) { animation-delay: -410ms; }
+.intro-opening .curtain-fold:nth-child(3) { animation-delay: -320ms; }
+.intro-opening .curtain-fold:nth-child(4) { animation-delay: -230ms; }
+.intro-opening .curtain-fold:nth-child(5) { animation-delay: -140ms; }
+.intro-opening .curtain-fold:nth-child(6) { animation-delay: -50ms; }
+.intro-opening .curtain-fold:nth-child(7) { animation-delay: -480ms; }
+.intro-opening .curtain-fold:nth-child(8) { animation-delay: -370ms; }
+.intro-opening .curtain-fold:nth-child(9) { animation-delay: -260ms; }
+.curtain-stage-light {
+  position: absolute;
+  z-index: 0;
+  inset: -15%;
+  opacity: 0;
+  background: conic-gradient(from 15deg at 50% 0%, transparent 0 38%, rgb(255 232 187 / 0.32) 45%, transparent 52% 100%);
+  filter: blur(18px);
+  transform: scaleX(0.08);
+  transform-origin: 50% 0;
+  pointer-events: none;
+}
+.intro-opening .curtain-stage-light {
+  animation: stageLightBloom 1.7s cubic-bezier(0.16, 0.75, 0.25, 1) 0.18s both;
+}
+.curtain-seam {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: linear-gradient(transparent, #f6d28d 18%, #fff2c8 50%, #f6d28d 82%, transparent);
+  box-shadow: 0 0 8px #e3aa4d, 0 0 24px rgb(255 220 154 / 0.7);
+  opacity: 0.45;
+  transform: translateX(-50%) scaleY(0.86);
+  pointer-events: none;
+}
+.intro-opening .curtain-seam {
+  animation: seamFlash 0.72s ease-out both;
+}
+.curtain-tie {
+  position: absolute;
+  z-index: 4;
+  top: 54%;
+  width: 86px;
+  height: 14px;
+  opacity: 0;
+  border: 3px solid #dab25e;
+  border-top: 0;
+  border-radius: 0 0 60% 60%;
+  filter: drop-shadow(0 4px 3px rgb(20 0 5 / 0.45));
+  pointer-events: none;
+}
+.curtain-tie::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  width: 10px;
+  height: 42px;
+  background: linear-gradient(90deg, #86611e, #f0d184 45%, #9b7228);
+  clip-path: polygon(20% 0, 80% 0, 100% 78%, 52% 100%, 0 78%);
+}
+.curtain-tie-left { right: -28px; transform: rotate(-16deg); }
+.curtain-tie-left::after { right: 4px; }
+.curtain-tie-right { left: -28px; transform: rotate(16deg); }
+.curtain-tie-right::after { left: 4px; }
+.intro-opening .curtain-tie { animation: tieSnap 1.45s cubic-bezier(0.2, 0.9, 0.2, 1) 0.12s both; }
+.curtain-sparks {
+  position: absolute;
+  z-index: 5;
+  top: 52%;
+  left: 50%;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+.curtain-spark {
+  position: absolute;
+  width: var(--spark-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  opacity: 0;
+  background: #ffe6a3;
+  box-shadow: 0 0 8px #ffc85a, 0 0 16px rgb(255 214 119 / 0.7);
+}
+.intro-opening .curtain-spark {
+  animation: sparkFlight 1.15s cubic-bezier(0.1, 0.65, 0.3, 1) var(--spark-delay) both;
+}
+.intro-opening .curtain-left {
+  animation: gatherCurtainLeft var(--curtain-duration) var(--curtain-ease) forwards;
+}
+.intro-opening .curtain-right {
+  animation: gatherCurtainRight var(--curtain-duration) var(--curtain-ease) forwards;
+}
+.intro-opening .curtain::before {
+  animation: none;
+}
+.curtain-center {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: opacity 0.35s ease, transform 0.55s var(--ease);
+}
+.intro-opening .curtain-center {
+  animation: invitationMarkLift 0.8s cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+.curtain-center .intro-names {
+  font-size: clamp(46px, 13vw, 72px);
+  line-height: 1;
+}
+.curtain-couple {
+  max-width: 80vw;
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: rgb(248 228 195 / 0.88);
+}
+.curtain-seal {
+  width: 76px;
+  margin: 12px 0 5px;
+  filter: drop-shadow(0 8px 10px rgb(20 0 5 / 0.45));
+  animation: sealPulse 2.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-opening .curtain-left {
+    animation: gatherCurtainLeft 0.01ms linear forwards;
+  }
+  .intro-opening .curtain-right {
+    animation: gatherCurtainRight 0.01ms linear forwards;
+  }
+  .curtain-center {
+    transition-duration: 0.01ms;
+  }
+  .intro-opening .curtain-fold {
+    animation: none;
+  }
+}
+
+@keyframes fabricBreathe {
+  from { transform: translateX(-1px); opacity: 0.72; }
+  to { transform: translateX(2px); opacity: 1; }
+}
+@keyframes flowingFold {
+  0% { transform: translate3d(-3px, -0.7%, 0) skewY(-0.8deg) scaleX(0.96); }
+  50% { transform: translate3d(1px, 0.5%, 0) skewY(0.35deg) scaleX(1.04); }
+  100% { transform: translate3d(4px, -0.25%, 0) skewY(0.9deg) scaleX(0.98); }
+}
+@keyframes gatherCurtainLeft {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+    clip-path: polygon(0 0, 100% 0, 99.2% 12%, 100% 27%, 98.7% 43%, 100% 58%, 99% 76%, 100% 100%, 0 100%);
+  }
+  12% { transform: translate3d(-1.5%, 0, 0) scaleX(1.01) skewY(-0.2deg); }
+  35% {
+    transform: translate3d(-25%, 1%, 0) scaleX(0.96) skewY(1.8deg);
+    clip-path: polygon(0 0, 100% 0, 92% 18%, 81% 40%, 72% 54%, 84% 70%, 96% 88%, 100% 100%, 0 100%);
+  }
+  67% {
+    transform: translate3d(-68%, -1%, 0) scaleX(0.78) skewY(-2.2deg) rotate(-0.8deg);
+    clip-path: polygon(0 0, 100% 0, 76% 20%, 58% 43%, 52% 55%, 65% 69%, 86% 88%, 100% 100%, 0 100%);
+  }
+  84% { transform: translate3d(-91%, 0.5%, 0) scaleX(0.55) skewY(1.4deg) rotate(0.5deg); }
+  100% { transform: translate3d(-108%, 0, 0) scaleX(0.42) skewY(0) rotate(0); }
+}
+@keyframes gatherCurtainRight {
+  0% {
+    transform: translate3d(0, 0, 0) scaleX(1);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 1% 76%, 0 58%, 1.3% 43%, 0 27%, 0.8% 12%);
+  }
+  12% { transform: translate3d(1.5%, 0, 0) scaleX(1.01) skewY(0.2deg); }
+  35% {
+    transform: translate3d(25%, 1%, 0) scaleX(0.96) skewY(-1.8deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 4% 88%, 16% 70%, 28% 54%, 19% 40%, 8% 18%);
+  }
+  67% {
+    transform: translate3d(68%, -1%, 0) scaleX(0.78) skewY(2.2deg) rotate(0.8deg);
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 14% 88%, 35% 69%, 48% 55%, 42% 43%, 24% 20%);
+  }
+  84% { transform: translate3d(91%, 0.5%, 0) scaleX(0.55) skewY(-1.4deg) rotate(-0.5deg); }
+  100% { transform: translate3d(108%, 0, 0) scaleX(0.42) skewY(0) rotate(0); }
+}
+@keyframes seamFlash {
+  0% { opacity: 0.45; transform: translateX(-50%) scaleY(0.86) scaleX(1); }
+  32% { opacity: 1; transform: translateX(-50%) scaleY(1) scaleX(4); }
+  100% { opacity: 0; transform: translateX(-50%) scaleY(1) scaleX(18); }
+}
+@keyframes stageLightBloom {
+  0% { opacity: 0; transform: scaleX(0.04) rotate(-2deg); }
+  45% { opacity: 0.82; }
+  100% { opacity: 0; transform: scaleX(1.1) rotate(2deg); }
+}
+@keyframes tieSnap {
+  0%, 12% { opacity: 0; scale: 0.35; }
+  30% { opacity: 1; scale: 1.15; }
+  58% { opacity: 1; scale: 0.92; }
+  100% { opacity: 0; scale: 1; }
+}
+@keyframes sparkFlight {
+  0% { opacity: 0; transform: rotate(var(--angle)) translateX(8px) scale(0.2); }
+  18% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--angle)) translateX(var(--distance)) scale(0.05); }
+}
+@keyframes invitationMarkLift {
+  0% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  38% { opacity: 1; transform: scale(1.06) translateY(-4px); filter: blur(0); }
+  100% { opacity: 0; transform: scale(0.78) translateY(-48px); filter: blur(5px); }
 }
 
 /* ================================================================ */

@@ -3,24 +3,19 @@
 import { useEffect, useState } from "react";
 import { WaxSeal } from "./decor";
 
-type Stage = "closed" | "opening" | "open" | "leaving" | "gone";
+type Stage = "closed" | "opening" | "gone";
+const CURTAIN_OPEN_MS = 1900;
+const REVEAL_BUFFER_MS = 300;
 
-// Full-screen closed envelope. Tapping the seal opens it, then reveals the invitation.
+// Full-screen theatre curtains. Tapping the monogram parts them to reveal the invitation.
 export function Intro({ bride, groom, monogram }: { bride: string; groom: string; monogram: string }) {
   const [stage, setStage] = useState<Stage>("closed");
 
   useEffect(() => {
     if (stage === "closed") return;
-    const next: Partial<Record<Stage, [Stage, number]>> = {
-      opening: ["open", 750],
-      open: ["leaving", 1500],
-      leaving: ["gone", 900],
-    };
-    const step = next[stage];
-    if (!step) return;
-    if (stage === "leaving") document.documentElement.classList.add("opened");
-    const t = setTimeout(() => setStage(step[0]), step[1]);
-    return () => clearTimeout(t);
+    document.documentElement.classList.add("opened");
+    const timer = setTimeout(() => setStage("gone"), CURTAIN_OPEN_MS + REVEAL_BUFFER_MS);
+    return () => clearTimeout(timer);
   }, [stage]);
 
   if (stage === "gone") return null;
@@ -31,23 +26,45 @@ export function Intro({ bride, groom, monogram }: { bride: string; groom: string
   };
 
   return (
-    <div className={`intro intro-${stage}`}>
-      <p className="intro-names">
-        {bride} <span>&amp;</span> {groom}
-      </p>
-      <button type="button" className="intro-env" onClick={open} aria-label="Open invitation">
-        <span className="ie-back" />
-        <span className="ie-letter">
-          <span className="ie-letter-kicker">We’re getting married</span>
-          <span className="ie-letter-names">
-            {bride} &amp; {groom}
+    <div
+      className={`intro intro-${stage}`}
+      style={{ "--curtain-duration": `${CURTAIN_OPEN_MS}ms` } as React.CSSProperties}
+    >
+      <button type="button" className="curtain-trigger" onClick={open} aria-label="Open invitation">
+        <span className="curtain-stage-light" aria-hidden="true" />
+        <span className="curtain curtain-left" aria-hidden="true">
+          <span className="curtain-folds">
+            {Array.from({ length: 8 }, (_, index) => <span className="curtain-fold" key={index} />)}
           </span>
+          <span className="curtain-tie curtain-tie-left" />
         </span>
-        <span className="ie-front" />
-        <span className="ie-flap" />
-        <WaxSeal monogram={monogram} className="ie-seal" />
+        <span className="curtain curtain-right" aria-hidden="true">
+          <span className="curtain-folds">
+            {Array.from({ length: 8 }, (_, index) => <span className="curtain-fold" key={index} />)}
+          </span>
+          <span className="curtain-tie curtain-tie-right" />
+        </span>
+        <span className="curtain-seam" aria-hidden="true" />
+        <span className="curtain-sparks" aria-hidden="true">
+          {Array.from({ length: 18 }, (_, index) => (
+            <span
+              className="curtain-spark"
+              style={{
+                "--angle": `${index * 20}deg`,
+                "--distance": `${95 + (index % 5) * 24}px`,
+                "--spark-size": `${3 + (index % 3) * 2}px`,
+                "--spark-delay": `${0.05 + (index % 4) * 0.035}s`,
+              } as React.CSSProperties}
+              key={index}
+            />
+          ))}
+        </span>
+        <span className="curtain-center">
+          <span className="intro-names">Jashna</span>
+          <span className="curtain-couple">{bride} &amp; {groom}</span>
+          <WaxSeal monogram={monogram} className="curtain-seal" />
+        </span>
       </button>
-      <p className="intro-hint">Tap the seal to open</p>
     </div>
   );
 }

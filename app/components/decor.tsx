@@ -376,15 +376,11 @@ export function ArchPainting({ className = "" }: { className?: string }) {
         <rect width="320" height="400" fill="url(#varnish)" opacity="0.6" />
         <rect width="320" height="400" filter="url(#grain)" opacity="0.4" />
 
-        <image
-          className="couple-photo"
-          href={`${import.meta.env.BASE_URL}file_00000000eab081f49f1839326aa21c4b.png`}
-          x="0"
-          y="0"
-          width="320"
-          height="400"
-          preserveAspectRatio="xMidYMid slice"
-        />
+        <foreignObject x="0" y="0" width="320" height="400">
+          <video className="couple-video" autoPlay muted loop playsInline aria-label="Wedding video">
+            <source src={`${import.meta.env.BASE_URL}video.mp4`} type="video/mp4" />
+          </video>
+        </foreignObject>
       </g>
       <path d={archPath(16, 16, 288, 384)} fill="none" stroke="#260409" strokeOpacity="0.6" strokeWidth="2" />
     </svg>
