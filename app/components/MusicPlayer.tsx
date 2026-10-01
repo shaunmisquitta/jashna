@@ -234,8 +234,7 @@ export function MusicPlayer({ src }: { src: string }) {
     <div className={`player ${playing ? "is-playing" : ""}`}>
       <audio
         ref={audioRef}
-        src={src}
-        preload="metadata"
+        preload="auto"
         loop={loop}
         onLoadedMetadata={(event) => seekToSongStart(event.currentTarget)}
         onError={() => (useSynth.current = true)}
@@ -245,7 +244,9 @@ export function MusicPlayer({ src }: { src: string }) {
           setTime({ pos: audio.currentTime, dur: audio.duration || 1 });
         }}
         onEnded={() => setPlaying(false)}
-      />
+      >
+        <source src={src} type="audio/mpeg" />
+      </audio>
       <p className="player-title">{playing ? "Our song is playing" : "Press play to hear our song"}</p>
       <div className="player-eq" aria-hidden>
         {Array.from({ length: 5 }, (_, i) => (
