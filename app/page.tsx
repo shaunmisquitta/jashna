@@ -7,13 +7,14 @@ import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
 import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
+import { PageHeightLogger } from "./components/PageHeightLogger";
 
 export default function Home() {
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
-    backgroundImage: `url("${baseUrl}wedding_background_460x2864.png")`,
+    backgroundImage: `url("${baseUrl}story3.jpeg")`,
     backgroundPosition: "top center",
-    backgroundSize: "100% 100%",
+    backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundColor: "var(--parchment)",
   } as CSSProperties;
@@ -21,10 +22,11 @@ export default function Home() {
   return (
     <>
       <SvgDefs />
-      <Intro />
+      <PageHeightLogger />
+      <Intro monogram={w.monogram} />
 
-      <main className="stage">
-        <article className="card" style={cardBackgrounds}>
+      <main className="stage" style={cardBackgrounds}>
+        <article className="card">
           {/* Title sits outside the scaled column so it can be placed against the full-width artwork */}
           <header className="title">
             <h1>
@@ -122,6 +124,29 @@ export default function Home() {
                 </Reveal>
               ))}
             </div>
+          </section>
+
+          {/* ---------- Our story note ---------- */}
+          <section className="block story-note-wrap" aria-label="Our story">
+            <Reveal variant="up" className="paper story-note">
+              <span className="story-note-tape" aria-hidden="true" />
+              <div className="story-note-photo">
+                <Image
+                  src={`${baseUrl}file_00000000eab081f49f1839326aa21c4b.png`}
+                  alt="The couple together at sunset"
+                  width={941}
+                  height={1671}
+                  unoptimized
+                />
+              </div>
+              <p className="story-note-kicker">Our beautiful story</p>
+              <p className="story-note-text">
+                Somewhere between two different worlds, two different stories, and countless little moments,
+                we found a love that feels like home. And now, we&apos;re ready to turn our beautiful story into
+                a lifetime together.
+              </p>
+              <span className="story-note-flourish" aria-hidden="true">♥</span>
+            </Reveal>
           </section>
 
           {/* ---------- Closing ---------- */}

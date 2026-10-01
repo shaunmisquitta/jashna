@@ -44,22 +44,25 @@ body {
 /* ================================================================ */
 
 .stage {
-  display: flex;
-  justify-content: center;
+  --page-side-gaps: clamp(24px, 6vw, 80px);
+  display: block;
   min-height: 100vh;
+  background-color: var(--parchment);
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
   container-type: inline-size;
 }
 
-/* One full-height invitation artwork stretched edge to edge without tiling. */
+/* Full-page artwork fills the invitation without changing its proportions. */
 .card {
   position: relative;
-  width: 100%;
-  min-height: 100vh;
+  width: 460px;
+  min-height: 0;
+  margin: 0 auto;
   overflow: hidden;
-  background-color: var(--parchment);
-  background-position: top center;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  background: transparent;
+  zoom: max(0.62, calc((100vw - var(--page-side-gaps)) / 460px));
 }
 
 /* A short flower shower celebrates the envelope opening, then clears away. */
@@ -96,27 +99,12 @@ body {
   width: 100%;
   overflow: visible;
 }
-/* The invitation is designed at phone width; on larger screens the whole
-   column is scaled up proportionally so every piece keeps its composition. */
+/* The content uses the same fixed design canvas as the card. The card itself
+   is fluidly scaled above, so every child grows and shrinks together. */
 .column {
-  width: min(100%, 460px);
+  width: 460px;
   margin: 0 auto;
   padding: 40px 0 28px;
-}
-@media (min-width: 768px) {
-  .column {
-    zoom: 1.3;
-  }
-}
-@media (min-width: 1100px) and (min-height: 700px) {
-  .column {
-    zoom: 1.5;
-  }
-}
-@media (min-width: 1600px) and (min-height: 850px) {
-  .column {
-    zoom: 1.75;
-  }
 }
 
 .block {
@@ -394,12 +382,7 @@ body {
 .title {
   display: flex;
   justify-content: center;
-  padding-top: clamp(32px, 10cqw, 46px);
-}
-@media (min-width: 700px) {
-  .title {
-    padding-top: 19cqw;
-  }
+  padding-top: 360px;
 }
 .title h1 {
   display: flex;
@@ -408,7 +391,7 @@ body {
 }
 .title-word {
   display: block;
-  width: min(60cqw, 456px);
+  width: 276px;
   height: auto;
   clip-path: inset(-5% 100% -5% 0);
 }
@@ -1115,6 +1098,80 @@ html.opened .hero-seal {
 }
 .rsvp.is-in .rsvp-seal {
   animation: stamp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 2s forwards;
+}
+
+/* ================================================================ */
+/* Story note                                                        */
+/* ================================================================ */
+
+.story-note-wrap {
+  margin-top: 24px;
+  margin-bottom: 82px;
+}
+.story-note {
+  --rot: -1.2deg;
+  width: 78%;
+  margin: 0 auto;
+  padding: 42px 30px 34px;
+  text-align: center;
+  transform: rotate(var(--rot));
+}
+.story-note::after {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border: 1px solid rgb(112 82 58 / 0.18);
+  pointer-events: none;
+}
+.story-note-tape {
+  position: absolute;
+  z-index: 2;
+  top: -10px;
+  left: 50%;
+  width: 92px;
+  height: 27px;
+  background: rgb(215 190 143 / 0.58);
+  box-shadow: 0 2px 4px rgb(75 48 27 / 0.1);
+  transform: translateX(-50%) rotate(1.5deg);
+}
+.story-note-photo {
+  position: relative;
+  width: 88%;
+  aspect-ratio: 4 / 5;
+  margin: 0 auto 25px;
+  overflow: hidden;
+  border: 8px solid #fffdf7;
+  background: #e9dfd1;
+  box-shadow:
+    0 8px 18px rgb(62 36 28 / 0.24),
+    0 0 0 1px rgb(92 61 46 / 0.12);
+  transform: rotate(1.4deg);
+}
+.story-note-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 54%;
+}
+.story-note-kicker {
+  margin-bottom: 16px;
+  font-family: var(--font-script);
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--wine-ink);
+}
+.story-note-text {
+  font-size: 16px;
+  font-style: italic;
+  line-height: 1.65;
+  color: #49383a;
+}
+.story-note-flourish {
+  display: block;
+  margin-top: 18px;
+  font-size: 15px;
+  color: #9b344c;
 }
 
 /* ================================================================ */
@@ -2178,6 +2235,132 @@ html.opened .hero-seal {
 @media (prefers-reduced-motion: reduce) {
   .intro-opening .window-shutter-left { transform: translateX(-104%); }
   .intro-opening .window-shutter-right { transform: translateX(104%); }
+}
+
+/* Full-screen burgundy and gold wedding opening. */
+.burgundy-opening {
+  background: transparent;
+}
+.burgundy-opening::before {
+  display: none;
+}
+.burgundy-opening .window-shutter {
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 0.05), transparent 18% 78%, rgb(20 0 6 / 0.24)),
+    repeating-linear-gradient(90deg, #641126 0 44px, #4d091b 44px 78px, #73152b 78px 112px, #551020 112px 148px);
+  box-shadow:
+    inset 0 0 70px rgb(18 0 5 / 0.4),
+    inset 0 0 0 1px rgb(255 210 164 / 0.08);
+}
+.burgundy-opening .window-shutter-left {
+  left: 0;
+  border-radius: 0;
+}
+.burgundy-opening .window-shutter-right {
+  right: 0;
+  border-radius: 0;
+  background-position: 18px 0, 18px 0;
+}
+.burgundy-opening .window-shutter::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  bottom: 0;
+  width: clamp(4px, 0.5vw, 7px);
+  background: linear-gradient(90deg, #8b641e, #f4daa0 48%, #9c7428);
+  box-shadow: 0 0 5px rgb(242 208 132 / 0.22);
+}
+.burgundy-opening .window-shutter-left::after {
+  right: clamp(8px, 1.2vw, 15px);
+}
+.burgundy-opening .window-shutter-right::after {
+  left: clamp(8px, 1.2vw, 15px);
+}
+.burgundy-inner-border {
+  display: none !important;
+}
+.burgundy-corner {
+  display: none !important;
+}
+.burgundy-corner::before,
+.burgundy-corner::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 7px;
+  aspect-ratio: 1;
+  border: 1px solid #d9ac55;
+  transform: translateY(-50%) rotate(45deg);
+}
+.burgundy-corner::before { left: 12%; }
+.burgundy-corner::after { right: 12%; }
+.burgundy-corner-top { top: clamp(38px, 8vh, 90px); }
+.burgundy-corner-bottom { bottom: clamp(38px, 8vh, 90px); }
+.opening-copy {
+  position: absolute;
+  z-index: 7;
+  top: 50%;
+  left: 50%;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 1.8vh, 18px);
+  width: min(82vw, 620px);
+  color: #f0d595;
+  text-align: center;
+  text-shadow: 0 3px 16px rgb(25 0 7 / 0.6);
+  transform: translate(-50%, -50%);
+  transition: opacity 0.25s ease, transform 0.48s ease;
+}
+.opening-kicker {
+  font-family: var(--font-display);
+  font-size: clamp(8px, 1.1vw, 13px);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+.opening-title {
+  font-family: var(--font-script);
+  font-size: clamp(52px, 12vw, 112px);
+  line-height: 0.95;
+}
+.opening-rule {
+  width: clamp(90px, 18vw, 180px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #f0d595 18% 82%, transparent);
+}
+.opening-seal {
+  position: relative !important;
+  width: clamp(68px, 9vw, 98px);
+  margin-top: clamp(5px, 1vh, 12px);
+  filter: drop-shadow(0 7px 8px rgb(25 0 7 / 0.48));
+  animation: sealPulse 2.2s ease-in-out infinite;
+}
+.burgundy-opening .window-latch {
+  display: none;
+}
+.intro-opening .opening-copy {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+.intro-opening .burgundy-opening::before {
+  opacity: 0;
+}
+.intro-opening .burgundy-opening .window-shutter-left {
+  transform: translateX(-101%);
+}
+.intro-opening .burgundy-opening .window-shutter-right {
+  transform: translateX(101%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-opening .burgundy-opening .window-shutter-left { transform: translateX(-101%); }
+  .intro-opening .burgundy-opening .window-shutter-right { transform: translateX(101%); }
 }
 
 /* ================================================================ */
