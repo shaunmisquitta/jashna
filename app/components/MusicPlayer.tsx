@@ -93,7 +93,7 @@ const SONG_START_SECONDS = 74;
 // Toggle the floating volume and play/pause controls.
 const SHOW_AUDIO_CONTROLS = false;
 // Toggle automatic music playback when the wedding window opens.
-const AUTOPLAY_MUSIC_ON_WINDOW_OPEN = false;
+const AUTOPLAY_MUSIC_ON_WINDOW_OPEN = true;
 
 export function MusicPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
