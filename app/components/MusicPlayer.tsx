@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 
 /* A gentle music-box arpeggio (Pachelbel-style progression) synthesised with
@@ -90,19 +90,26 @@ class MusicBox {
 
 const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
 const SONG_START_SECONDS = 74;
+// Toggle the floating volume and play/pause controls.
+const SHOW_AUDIO_CONTROLS = false;
+// Toggle automatic music playback when the wedding window opens.
+const AUTOPLAY_MUSIC_ON_WINDOW_OPEN = false;
 
 export function MusicPlayer({ src }: { src: string }) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const boxRef = useRef<MusicBox | null>(null);
   const useSynth = useRef(false);
   const startApplied = useRef(false);
+  const fadeFrame = useRef<number | null>(null);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState({ pos: 0, dur: MusicBox.loopLength });
   const [loop, setLoop] = useState(true);
   const [volume, setVolume] = useState(0.5);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
 
   const startSynth = useCallback(() => {
     useSynth.current = true;
@@ -111,6 +118,21 @@ export function MusicPlayer({ src }: { src: string }) {
     boxRef.current.play();
     setPlaying(true);
   }, [volume]);
+
+  const fadeIn = useCallback((setLevel: (level: number) => void, target: number) => {
+    if (fadeFrame.current !== null) cancelAnimationFrame(fadeFrame.current);
+    const startedAt = performance.now();
+    const duration = 3600;
+
+    const tick = (now: number) => {
+      const progress = Math.max(0, Math.min(1, (now - startedAt) / duration));
+      const eased = 1 - (1 - progress) ** 3;
+      setLevel(Math.max(0, Math.min(1, target * eased)));
+      fadeFrame.current = progress < 1 ? requestAnimationFrame(tick) : null;
+    };
+
+    fadeFrame.current = requestAnimationFrame(tick);
+  }, []);
 
   const seekToSongStart = useCallback((audio: HTMLAudioElement) => {
     if (startApplied.current || !Number.isFinite(audio.duration)) return;
@@ -127,6 +149,32 @@ export function MusicPlayer({ src }: { src: string }) {
     audio.play().then(() => setPlaying(true), startSynth);
   }, [seekToSongStart, startSynth]);
 
+  const playWithFade = useCallback(() => {
+    const startSynthWithFade = () => {
+      useSynth.current = true;
+      boxRef.current ??= new MusicBox();
+      boxRef.current.setVolume(0);
+      boxRef.current.play();
+      setPlaying(true);
+      fadeIn((level) => boxRef.current?.setVolume(level), volume);
+    };
+
+    const audio = audioRef.current;
+    if (useSynth.current || !audio) {
+      startSynthWithFade();
+      return;
+    }
+
+    seekToSongStart(audio);
+    audio.volume = 0;
+    audio.play().then(() => {
+      setPlaying(true);
+      fadeIn((level) => {
+        audio.volume = level;
+      }, volume);
+    }, startSynthWithFade);
+  }, [fadeIn, seekToSongStart, volume]);
+
   const pause = useCallback(() => {
     if (useSynth.current) boxRef.current?.pause();
     else audioRef.current?.pause();
@@ -137,6 +185,12 @@ export function MusicPlayer({ src }: { src: string }) {
     if (audioRef.current) audioRef.current.volume = volume;
     boxRef.current?.setVolume(volume);
   }, [volume]);
+
+  useEffect(() => {
+    if (!AUTOPLAY_MUSIC_ON_WINDOW_OPEN) return;
+    window.addEventListener("wedding:open", playWithFade);
+    return () => window.removeEventListener("wedding:open", playWithFade);
+  }, [playWithFade]);
 
   // Prepare the requested starting position while keeping playback paused
   // until the guest explicitly presses Play.
@@ -156,7 +210,10 @@ export function MusicPlayer({ src }: { src: string }) {
     return () => clearInterval(id);
   }, [playing]);
 
-  useEffect(() => () => boxRef.current?.pause(), []);
+  useEffect(() => () => {
+    if (fadeFrame.current !== null) cancelAnimationFrame(fadeFrame.current);
+    boxRef.current?.pause();
+  }, []);
 
   const restart = () => {
     if (useSynth.current) boxRef.current?.restart();
@@ -189,7 +246,7 @@ export function MusicPlayer({ src }: { src: string }) {
         }}
         onEnded={() => setPlaying(false)}
       />
-      <p className="player-title">Press play to hear our song</p>
+      <p className="player-title">{playing ? "Our song is playing" : "Press play to hear our song"}</p>
       <div className="player-eq" aria-hidden>
         {Array.from({ length: 5 }, (_, i) => (
           <span key={i} style={{ animationDelay: `${i * -0.23}s` }} />
@@ -232,7 +289,7 @@ export function MusicPlayer({ src }: { src: string }) {
         </button>
       </div>
     </div>
-    {mounted && createPortal(
+    {SHOW_AUDIO_CONTROLS && mounted && createPortal(
       <div className="floating-audio-controls">
         <label className="floating-volume">
           <svg viewBox="0 0 24 24" aria-hidden>

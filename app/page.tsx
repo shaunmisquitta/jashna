@@ -21,7 +21,7 @@ export default function Home() {
   return (
     <>
       <SvgDefs />
-      <Intro bride={w.bride} groom={w.groom} monogram={w.monogram} />
+      <Intro />
 
       <main className="stage">
         <article className="card" style={cardBackgrounds}>

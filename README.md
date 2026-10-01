@@ -16,6 +16,10 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+### Audio controls
+
+The floating volume and play/pause controls are controlled by the `SHOW_AUDIO_CONTROLS` boolean near the top of `app/components/MusicPlayer.tsx`. The separate `AUTOPLAY_MUSIC_ON_WINDOW_OPEN` boolean controls whether music starts with a gradual fade when the window opens.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
