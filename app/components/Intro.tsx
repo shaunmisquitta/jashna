@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { WaxSeal } from "./decor";
+import { JashnaLettering, WaxSeal } from "./decor";
 
 type Stage = "closed" | "opening" | "gone";
 
@@ -59,7 +59,7 @@ export function Intro({ monogram }: { monogram: string }) {
         </span>
         <span className="opening-copy" aria-hidden="true">
           <span className="opening-kicker">Together with their families</span>
-          <span className="opening-title">Jashna</span>
+          <JashnaLettering className="opening-title" />
           <span className="opening-rule" />
           <WaxSeal monogram={monogram} className="opening-seal" />
         </span>

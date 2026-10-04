@@ -2267,22 +2267,6 @@ html.opened .hero-seal {
   border-radius: 0;
   background-position: 18px 0, 18px 0;
 }
-.burgundy-opening .window-shutter::after {
-  content: "";
-  position: absolute;
-  z-index: 2;
-  top: 0;
-  bottom: 0;
-  width: clamp(4px, 0.5vw, 7px);
-  background: linear-gradient(90deg, #8b641e, #f4daa0 48%, #9c7428);
-  box-shadow: 0 0 5px rgb(242 208 132 / 0.22);
-}
-.burgundy-opening .window-shutter-left::after {
-  right: clamp(8px, 1.2vw, 15px);
-}
-.burgundy-opening .window-shutter-right::after {
-  left: clamp(8px, 1.2vw, 15px);
-}
 .burgundy-inner-border {
   display: none !important;
 }
@@ -2326,9 +2310,11 @@ html.opened .hero-seal {
   text-transform: uppercase;
 }
 .opening-title {
-  font-family: var(--font-script);
-  font-size: clamp(52px, 12vw, 112px);
-  line-height: 0.95;
+  display: block;
+  width: clamp(210px, 52vw, 385px);
+  height: auto;
+  clip-path: inset(-5% 100% -5% 0);
+  animation: write 2.2s ease-in-out 0.3s forwards;
 }
 .opening-rule {
   width: clamp(90px, 18vw, 180px);
