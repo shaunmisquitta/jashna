@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 const fmt = (seconds: number) => {
   if (!Number.isFinite(seconds)) return "0:00";
@@ -20,26 +20,6 @@ export function MusicPlayer({ src }: { src: string }) {
     audioRef.current?.pause();
   }, []);
 
-  const restart = useCallback(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    audio.currentTime = 0;
-    setTime((current) => ({ ...current, pos: 0 }));
-    void audio.play();
-  }, []);
-
-  useEffect(() => {
-    const playFromStart = () => {
-      const audio = audioRef.current;
-      if (!audio) return;
-      audio.currentTime = 0;
-      void audio.play();
-    };
-
-    window.addEventListener("wedding:open", playFromStart);
-    return () => window.removeEventListener("wedding:open", playFromStart);
-  }, []);
-
   const pct = time.dur ? Math.min(100, (time.pos / time.dur) * 100) : 0;
 
   const playPauseIcon = playing ? (
@@ -51,6 +31,7 @@ export function MusicPlayer({ src }: { src: string }) {
   return (
     <div className={`player ${playing ? "is-playing" : ""}`}>
       <audio
+        id="wedding-song"
         ref={audioRef}
         src={src}
         preload="auto"
@@ -81,9 +62,6 @@ export function MusicPlayer({ src }: { src: string }) {
         <span className="player-time">{fmt(time.dur)}</span>
       </div>
       <div className="player-controls">
-        <button type="button" aria-label="Restart song" onClick={restart}>
-          <svg viewBox="0 0 24 24"><path d="M18 5 8 12l10 7zM5 5h2v14H5z" className="fill" /></svg>
-        </button>
         <button
           type="button"
           className="pc-main"

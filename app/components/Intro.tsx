@@ -12,7 +12,11 @@ export function Intro({ monogram }: { monogram: string }) {
 
   const openInvitation = () => {
     if (stage !== "closed") return;
-    window.dispatchEvent(new Event("wedding:open"));
+    const audio = document.getElementById("wedding-song") as HTMLAudioElement | null;
+    if (audio) {
+      audio.currentTime = 0;
+      void audio.play();
+    }
     setStage("opening");
   };
 
@@ -40,10 +44,7 @@ export function Intro({ monogram }: { monogram: string }) {
       <button
         type="button"
         className="intro-window burgundy-opening"
-        onPointerDown={openInvitation}
-        onClick={(event) => {
-          if (event.detail === 0) openInvitation();
-        }}
+        onClick={openInvitation}
         aria-label="Open the wedding invitation"
         aria-disabled={stage !== "closed"}
       >
