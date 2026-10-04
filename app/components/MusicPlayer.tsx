@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const fmt = (seconds: number) => {
   if (!Number.isFinite(seconds)) return "0:00";
@@ -19,6 +19,10 @@ export function MusicPlayer({ src }: { src: string }) {
   const pause = useCallback(() => {
     audioRef.current?.pause();
   }, []);
+
+  useEffect(() => {
+    audioRef.current?.load();
+  }, [src]);
 
   const pct = time.dur ? Math.min(100, (time.pos / time.dur) * 100) : 0;
 

@@ -14,7 +14,6 @@ export function Intro({ monogram }: { monogram: string }) {
     if (stage !== "closed") return;
     const audio = document.getElementById("wedding-song") as HTMLAudioElement | null;
     if (audio) {
-      audio.currentTime = 0;
       void audio.play();
     }
     setStage("opening");
