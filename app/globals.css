@@ -888,6 +888,12 @@ html.opened .hero-seal {
   margin-bottom: 4px;
   color: var(--wine-ink);
 }
+.event-icon-image {
+  width: 60px;
+  height: 60px;
+  margin-bottom: -6px;
+  object-fit: contain;
+}
 .event-haldi .event-icon {
   color: #c98a12;
   animation: spinSlow 14s linear infinite;
@@ -908,6 +914,7 @@ html.opened .hero-seal {
   margin-top: 2px;
   font-family: var(--font-display);
   font-size: 7.5px;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #7a6464;
@@ -916,6 +923,7 @@ html.opened .hero-seal {
   margin-top: 4px;
   font-family: var(--font-display);
   font-size: 13px;
+  font-weight: 700;
   color: var(--wine-ink);
 }
 .event-rule {

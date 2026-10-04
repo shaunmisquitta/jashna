@@ -107,8 +107,29 @@ export default function Home() {
                   delay={150 + i * 200}
                   className={`paper event event-${e.icon}`}
                 >
-                  <Icon name={e.icon} className="event-icon" />
-                  <h2 className="event-name">{e.name}</h2>
+                  {e.icon === "haldi" ? (
+                    <Image
+                      className="event-icon event-icon-image"
+                      src={`${baseUrl}Golden Festive Ring Celebration Icon.png`}
+                      alt="Golden festive ring celebration icon"
+                      width={60}
+                      height={60}
+                      unoptimized
+                    />
+                  ) : (
+                    <Icon name={e.icon} className="event-icon" />
+                  )}
+                  <h2 className="event-name">
+                    {e.icon === "haldi" ? (
+                      <>
+                        Engagement,
+                        <br />
+                        Haldi &amp; Cocktail
+                      </>
+                    ) : (
+                      e.name
+                    )}
+                  </h2>
                   <p className="event-date">{e.date}</p>
                   <p className="event-time">{e.time}</p>
                   <span className="event-rule" />

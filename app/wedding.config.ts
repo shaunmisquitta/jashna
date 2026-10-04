@@ -30,10 +30,10 @@ export const wedding = {
   // Shown side by side.
   events: [
     {
-      name: "Haldi & Cocktail",
+      name: "Engagement,Haldi & Cocktail",
       icon: "haldi",
       date: "Friday, 13 November 2026",
-      time: "6:00 p.m. onwards",
+      time: "4:00 p.m. onwards",
       venue: "Ruby Banquets",
       address: ["Vasai West"],
       mapsUrl: "https://maps.app.goo.gl/qYDcsUjAgw5S6LBV6",
