@@ -1,6 +1,11 @@
 // All the invitation's content lives here — edit this file to personalise the card.
 
 export const wedding = {
+  development: {
+    // Set to false when you want to test the opening curtain locally.
+    // This setting is ignored in production builds.
+    skipIntro: true,
+  },
   bride: "Ashwini",
   groom: "Jason",
   monogram: "AJ",

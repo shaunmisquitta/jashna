@@ -295,108 +295,83 @@ function Rose({ x, y, r, c, leaf }: { x: number; y: number; r: number; c: string
   );
 }
 
-export function ArchPainting({ className = "" }: { className?: string }) {
+export function ArchPainting({ className = "", videoSrc }: { className?: string; videoSrc: string }) {
+  const outerArch = archPath(0, 0, 320, 400);
+  const innerArch = archPath(16, 16, 288, 384);
+
   return (
     <svg viewBox="0 0 320 400" className={`arch ${className}`} overflow="hidden" aria-hidden>
-      <path d={archPath(0, 0, 320, 400)} fill="url(#wineFrame)" />
-      <g clipPath="url(#archInner)">
-        {/* warm candle-lit backdrop */}
-        <rect width="320" height="400" fill="url(#weddingWall)" />
-        <ellipse className="p-glow" cx="160" cy="190" rx="130" ry="120" fill="url(#glow)" />
-        {/* church-window doorway behind the couple */}
-        <path d={archPath(78, 64, 164, 340)} fill="#fff8ee" opacity="0.55" />
-        <path d={archPath(78, 64, 164, 340)} fill="none" stroke="#c9a46a" strokeOpacity="0.5" strokeWidth="1.2" />
-        <path d="M160 64 V404 M78 190 H242" stroke="#c9a46a" strokeOpacity="0.25" strokeWidth="1" />
-
-        {/* fairy-light strings */}
-        {lightStrings.map((l, i) => (
-          <g key={i}>
-            <path d={`M${l.x} 16 V${16 + l.len}`} stroke="#b89b6a" strokeOpacity="0.45" strokeWidth="0.6" />
-            {Array.from({ length: Math.floor(l.len / 14) }, (_, k) => (
-              <circle
-                key={k}
-                className="twinkle"
-                cx={l.x}
-                cy={24 + k * 14}
-                r="1.6"
-                fill="#fff3c4"
-                style={{ animationDelay: `${((i * 5 + k * 3) % 10) * 0.25}s` }}
-              />
-            ))}
-          </g>
-        ))}
-        {bokeh.map((b, i) => (
-          <circle
-            key={i}
-            className="twinkle"
-            cx={f(b.x)}
-            cy={f(b.y)}
-            r={f(b.r)}
-            fill="#fffaf0"
-            opacity={f(b.o)}
-            style={{ animationDelay: `${f(b.d)}s` }}
-          />
-        ))}
-
-        {/* aisle */}
-        <path d="M0 318 H320 V400 H0Z" fill="#e8d2bd" />
-        <path d="M128 318 H192 L236 400 H84Z" fill="#7a1f33" opacity="0.85" />
-        <path d="M128 318 H192" stroke="#c9a46a" strokeWidth="1.5" />
-
-        {/* tied-back drapes */}
-        <g className="drape">
-          <path d="M16 16 C 70 30 96 110 70 176 C 58 210 48 290 58 404 H16Z" fill="url(#drape)" />
-          <path d="M34 20 C 70 60 78 130 60 180 M52 190 C 44 250 42 330 46 404" stroke="#000" strokeOpacity="0.07" strokeWidth="1.2" fill="none" />
-          <path d="M48 178 q18 -6 28 4 q-12 10 -30 4z" fill="#c9a46a" />
-        </g>
-        <g className="drape" transform="translate(320 0) scale(-1 1)">
-          <path d="M16 16 C 70 30 96 110 70 176 C 58 210 48 290 58 404 H16Z" fill="url(#drape)" />
-          <path d="M34 20 C 70 60 78 130 60 180 M52 190 C 44 250 42 330 46 404" stroke="#000" strokeOpacity="0.07" strokeWidth="1.2" fill="none" />
-          <path d="M48 178 q18 -6 28 4 q-12 10 -30 4z" fill="#c9a46a" />
-        </g>
-
-        {/* rose garland following the arch */}
-        <g className="garland">
-          {garland.map((g, i) => (
-            <Rose key={i} {...g} />
-          ))}
-        </g>
-
-        {/* drifting petals */}
-        {petals.map((p, i) => (
-          <g key={i} className="petal" style={{ animationDelay: `${f(-p.d)}s` }}>
-            <path
-              d={`M${f(p.x)} 0 q${f(p.s * 0.6)} ${f(-p.s * 0.2)} ${f(p.s * 0.5)} ${f(p.s * 0.6)} q${f(-p.s * 0.4)} ${f(p.s * 0.3)} ${f(-p.s * 0.5)} ${f(-p.s * 0.6)}z`}
-              fill={i % 3 === 0 ? "#9b2a3c" : "#f1b9b9"}
-              transform={`rotate(${f(p.r)} ${f(p.x)} 0)`}
-            />
-          </g>
-        ))}
-
-        <rect width="320" height="400" fill="url(#varnish)" opacity="0.6" />
-        <rect width="320" height="400" filter="url(#grain)" opacity="0.4" />
-
-        <foreignObject className="couple-foreign" x="0" y="0" width="320" height="400" overflow="hidden">
-          <video className="couple-video" autoPlay muted loop playsInline aria-label="Wedding video">
-            <source src={`${import.meta.env.BASE_URL}video.mp4`} type="video/mp4" />
-          </video>
-        </foreignObject>
-      </g>
-      <path d={archPath(16, 16, 288, 384)} fill="none" stroke="#260409" strokeOpacity="0.6" strokeWidth="2" />
+      <path d={innerArch} fill="#FFF" stroke="#d4a548" strokeOpacity="0.72" strokeWidth="2" />
+      <foreignObject x="16" y="16" width="288" height="384" overflow="hidden" clipPath="url(#archInner)">
+        <video className="couple-video mt-5" autoPlay muted loop playsInline preload="metadata">
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+      </foreignObject>
+      <path d={`${outerArch} ${innerArch}`} fill="url(#wineFrame)" fillRule="evenodd" clipRule="evenodd" />
+      <path d={innerArch} fill="none" stroke="#d4a548" strokeOpacity="0.72" strokeWidth="2" />
     </svg>
   );
 }
 
 /* ---------------- Envelope pieces ---------------- */
 
-export function EnvelopePocket({ className = "" }: { className?: string }) {
+export function WeddingBalcony({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 400 230" preserveAspectRatio="none" className={className} aria-hidden>
-      <path d="M0 0 L200 118 L0 230Z" fill="#5c1423" />
-      <path d="M400 0 L200 118 L400 230Z" fill="#561220" />
-      <path d="M0 230 L200 108 L400 230Z" fill="#661a2a" />
-      <path d="M0 230 L200 108 L400 230" fill="none" stroke="#fff" strokeOpacity="0.07" strokeWidth="1.5" />
-      <path d="M0 0 L200 118 L400 0" fill="none" stroke="#000" strokeOpacity="0.18" strokeWidth="1" />
+      <defs>
+        <linearGradient id="balconyVelvet" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#7b2034" />
+          <stop offset="0.5" stopColor="#5a1021" />
+          <stop offset="1" stopColor="#350711" />
+        </linearGradient>
+        <linearGradient id="balconyGold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#fff0b0" />
+          <stop offset="0.45" stopColor="#d4a548" />
+          <stop offset="1" stopColor="#80571b" />
+        </linearGradient>
+      </defs>
+
+      <path d="M0 43 Q200 118 400 43 V230 H0Z" fill="url(#balconyVelvet)" />
+      <path d="M0 43 Q200 118 400 43" fill="none" stroke="#2b050d" strokeOpacity="0.55" strokeWidth="12" />
+      <path d="M0 39 Q200 108 400 39" fill="none" stroke="url(#balconyGold)" strokeWidth="8" />
+      <path d="M0 52 Q200 126 400 52" fill="none" stroke="#f3d78e" strokeOpacity="0.48" strokeWidth="2" />
+
+      <path
+        d="M14 88 Q200 142 386 88 V207 Q348 178 310 207 Q272 178 234 207 Q196 178 158 207 Q120 178 82 207 Q48 181 14 207Z"
+        fill="#681629"
+        opacity="0.72"
+      />
+      <path
+        d="M19 93 Q200 143 381 93 M28 112 Q200 156 372 112 M40 137 Q200 171 360 137"
+        fill="none"
+        stroke="#d6a84e"
+        strokeOpacity="0.28"
+        strokeWidth="1.4"
+      />
+
+      <g transform="translate(48 72)">
+        <ellipse rx="29" ry="8" fill="#556139" transform="rotate(-24)" />
+        <ellipse rx="27" ry="7" fill="#74804d" transform="rotate(22)" />
+        <circle cx="-16" cy="-3" r="12" fill="#f2d8c5" />
+        <circle cx="4" cy="3" r="14" fill="#a9344a" />
+        <circle cx="22" cy="-4" r="10" fill="#f3e5d0" />
+        <circle cx="4" cy="3" r="5" fill="#6c1425" opacity="0.45" />
+      </g>
+      <g transform="translate(352 72) scale(-1 1)">
+        <ellipse rx="29" ry="8" fill="#556139" transform="rotate(-24)" />
+        <ellipse rx="27" ry="7" fill="#74804d" transform="rotate(22)" />
+        <circle cx="-16" cy="-3" r="12" fill="#f2d8c5" />
+        <circle cx="4" cy="3" r="14" fill="#a9344a" />
+        <circle cx="22" cy="-4" r="10" fill="#f3e5d0" />
+        <circle cx="4" cy="3" r="5" fill="#6c1425" opacity="0.45" />
+      </g>
+
+      <g transform="translate(200 126)">
+        <circle r="34" fill="url(#balconyGold)" />
+        <circle r="27" fill="#5b1122" stroke="#f5dfa0" strokeWidth="1.5" />
+        <path d="M0 17 C-25 2 -23 -15 -11 -19 C-4 -21 0 -15 0 -10 C0 -15 4 -21 11 -19 C23 -15 25 2 0 17Z" fill="#e3bd68" />
+      </g>
+      <path d="M0 221 H400" stroke="url(#balconyGold)" strokeWidth="9" />
     </svg>
   );
 }

@@ -7,8 +7,8 @@ type Stage = "closed" | "opening" | "gone";
 
 const OPEN_MS = 1450;
 
-export function Intro({ monogram }: { monogram: string }) {
-  const [stage, setStage] = useState<Stage>("closed");
+export function Intro({ monogram, disabled = false }: { monogram: string; disabled?: boolean }) {
+  const [stage, setStage] = useState<Stage>(disabled ? "gone" : "closed");
 
   const openInvitation = () => {
     if (stage !== "closed") return;
@@ -20,9 +20,15 @@ export function Intro({ monogram }: { monogram: string }) {
   };
 
   useEffect(() => {
+    if (disabled) {
+      document.documentElement.classList.remove("intro-active");
+      document.documentElement.classList.add("opened");
+      return () => document.documentElement.classList.remove("opened");
+    }
+
     document.documentElement.classList.add("intro-active");
     return () => document.documentElement.classList.remove("intro-active");
-  }, []);
+  }, [disabled]);
 
   useEffect(() => {
     if (stage !== "opening") return;

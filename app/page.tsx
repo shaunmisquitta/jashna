@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { wedding as w } from "./wedding.config";
-import { Anthurium, ArchPainting, JashnaLettering, EnvelopePocket, Icon, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
+import { Anthurium, ArchPainting, JashnaLettering, WeddingBalcony, Icon, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
 import { Reveal } from "./components/Reveal";
 import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
@@ -10,6 +10,7 @@ import { Calendar } from "./components/Calendar";
 import { PageHeightLogger } from "./components/PageHeightLogger";
 
 export default function Home() {
+  const skipIntro = process.env.NODE_ENV === "development" && w.development.skipIntro;
   const baseUrl = import.meta.env.BASE_URL;
   const cardBackgrounds = {
     backgroundImage: `url("${baseUrl}story3.jpeg")`,
@@ -23,7 +24,7 @@ export default function Home() {
     <>
       <SvgDefs />
       <PageHeightLogger />
-      <Intro monogram={w.monogram} />
+      <Intro key={skipIntro ? "skipped" : "enabled"} monogram={w.monogram} disabled={skipIntro} />
 
       <main className="stage" style={cardBackgrounds}>
         <article className="card">
@@ -38,8 +39,9 @@ export default function Home() {
 
           <section className="hero" aria-label="Invitation">
             <div className="hero-back" />
-            <ArchPainting className="hero-arch" />
-            <EnvelopePocket className="hero-pocket" />
+
+            <ArchPainting className="hero-arch z-100" videoSrc={`${baseUrl}video.mp4`} />
+            <WeddingBalcony className="hero-balcony" />
             <WaxSeal monogram={w.monogram} className="hero-seal" />
           </section>
 

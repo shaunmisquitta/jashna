@@ -34,7 +34,7 @@ export function MusicPlayer({ src }: { src: string }) {
 
   return (
     <div className={`player ${playing ? "is-playing" : ""}`}>
-      <audio
+      {/* <audio
         id="wedding-song"
         ref={audioRef}
         src={src}
@@ -50,7 +50,7 @@ export function MusicPlayer({ src }: { src: string }) {
           const audio = event.currentTarget;
           setTime({ pos: audio.currentTime, dur: audio.duration });
         }}
-      />
+      /> */}
       <p className="player-title">{playing ? "Our song is playing" : "Press play to hear our song"}</p>
       <div className="player-eq" aria-hidden>
         {Array.from({ length: 5 }, (_, i) => (

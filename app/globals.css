@@ -401,18 +401,21 @@ html.opened .title-word {
 
 .hero {
   position: relative;
+  isolation: isolate;
   width: 70%;
   margin: 0 auto 60px;
   aspect-ratio: 400 / 470;
 }
 .hero-back {
   position: absolute;
+  z-index: 0;
   inset: 30% 0 0;
   background: linear-gradient(#3a0711, #4a0c18);
   box-shadow: 0 20px 36px rgb(35 5 12 / 0.45);
 }
 .hero-arch {
   position: absolute;
+  z-index: 5;
   top: 0;
   left: 11%;
   width: 78%;
@@ -424,16 +427,18 @@ html.opened .title-word {
 html.opened .hero-arch {
   animation: rise 1.8s var(--ease) 0.5s forwards;
 }
-.hero-pocket {
+.hero-balcony {
   position: absolute;
+  z-index: 6;
   top: 51%;
   left: 0;
   width: 100%;
   height: 49%;
-  filter: drop-shadow(0 -3px 6px rgb(0 0 0 / 0.35));
+  filter: drop-shadow(0 -5px 9px rgb(0 0 0 / 0.38));
 }
 .hero-seal {
   position: absolute;
+  z-index: 7;
   top: 76%;
   left: 50%;
   width: 18%;
@@ -443,19 +448,15 @@ html.opened .hero-seal {
   animation: stamp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 1.6s forwards;
 }
 
-.couple-foreign,
-.couple-video {
-  overflow: hidden;
-  clip-path: polygon(50% 0, 67% 2%, 81% 9%, 92% 21%, 98% 34%, 100% 100%, 0 100%, 2% 34%, 8% 21%, 19% 9%, 33% 2%);
-}
 .couple-video {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  background: #fff;
-  transform: scale(1.08);
-  transform-origin: center;
+  object-position: center top;
+  background: transparent;
+  transform: scale(1.3);
+  transform-origin: 50% 50%;
   filter: drop-shadow(0 5px 8px rgb(45 20 12 / 0.3));
 }
 
@@ -1220,6 +1221,7 @@ html.opened .hero-seal {
 .closing .sibling-role {
   margin-top: 5px;
   font-size: 7.5px;
+  font-weight: 700;
   line-height: 1.5;
   letter-spacing: 0.12em;
 }
