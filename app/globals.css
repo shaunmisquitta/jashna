@@ -45,13 +45,21 @@ body {
 
 .stage {
   --page-side-gaps: clamp(24px, 6vw, 80px);
+  position: relative;
   display: block;
   min-height: 100vh;
-  background-color: var(--parchment);
+  background-color: #fbfbf3;
+  container-type: inline-size;
+}
+
+.stage-background {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
   background-position: top center;
   background-size: cover;
   background-repeat: no-repeat;
-  container-type: inline-size;
+  pointer-events: none;
 }
 
 /* Full-page artwork fills the invitation without changing its proportions. */
@@ -109,6 +117,7 @@ body {
 
 .block {
   position: relative;
+  z-index: 20;
   width: 86%;
   margin: 0 auto 64px;
 }
@@ -380,6 +389,8 @@ body {
 /* Positioned in multiples of the card width, like the background, so the
    lettering always lands in the clear beige area below the top garland. */
 .title {
+  position: relative;
+  z-index: 20;
   display: flex;
   justify-content: center;
   padding-top: 360px;
@@ -406,12 +417,19 @@ html.opened .title-word {
   margin: 0 auto 60px;
   aspect-ratio: 400 / 470;
 }
+.hero-video {
+  position: relative;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 .hero-back {
   position: absolute;
   z-index: 0;
   inset: 30% 0 0;
   background: linear-gradient(#3a0711, #4a0c18);
-  box-shadow: 0 20px 36px rgb(35 5 12 / 0.45);
 }
 .hero-arch {
   position: absolute;
@@ -422,7 +440,6 @@ html.opened .title-word {
   overflow: hidden;
   contain: paint;
   transform: translateY(30%);
-  filter: drop-shadow(0 -4px 10px rgb(0 0 0 / 0.3));
 }
 html.opened .hero-arch {
   animation: rise 1.8s var(--ease) 0.5s forwards;
@@ -434,7 +451,6 @@ html.opened .hero-arch {
   left: 0;
   width: 100%;
   height: 49%;
-  filter: drop-shadow(0 -5px 9px rgb(0 0 0 / 0.38));
 }
 .hero-seal {
   position: absolute;
@@ -2315,7 +2331,7 @@ html.opened .hero-seal {
 }
 .opening-kicker {
   font-family: var(--font-display);
-  font-size: clamp(8px, 1.1vw, 13px);
+  font-size: clamp(12px, 1.5vw, 18px);
   letter-spacing: 0.32em;
   text-transform: uppercase;
 }
@@ -2337,6 +2353,14 @@ html.opened .hero-seal {
   margin-top: clamp(5px, 1vh, 12px);
   filter: drop-shadow(0 7px 8px rgb(25 0 7 / 0.48));
   animation: sealPulse 2.2s ease-in-out infinite;
+}
+.opening-prompt {
+  font-family: var(--font-display);
+  font-size: clamp(11px, 1.3vw, 16px);
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #f0d595;
 }
 .burgundy-opening .window-latch {
   display: none;

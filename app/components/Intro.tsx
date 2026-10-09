@@ -68,9 +68,9 @@ export function Intro({ monogram, disabled = false }: { monogram: string; disabl
           <JashnaLettering className="opening-title" />
           <span className="opening-rule" />
           <WaxSeal monogram={monogram} className="opening-seal" />
+          <span className="opening-prompt">Tap here to see two hearts become one</span>
         </span>
       </button>
-      <p className="intro-hint">Tap to open</p>
     </div>
   );
 }

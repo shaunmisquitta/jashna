@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 import { wedding as w } from "./wedding.config";
-import { Anthurium, ArchPainting, JashnaLettering, WeddingBalcony, Icon, SmallEnvelope, SvgDefs, WaxSeal } from "./components/decor";
+import { Anthurium, JashnaLettering, Icon, SmallEnvelope, SvgDefs } from "./components/decor";
 import { Reveal } from "./components/Reveal";
 import { Intro } from "./components/Intro";
 import { MusicPlayer } from "./components/MusicPlayer";
@@ -12,12 +12,8 @@ import { PageHeightLogger } from "./components/PageHeightLogger";
 export default function Home() {
   const skipIntro = process.env.NODE_ENV === "development" && w.development.skipIntro;
   const baseUrl = import.meta.env.BASE_URL;
-  const cardBackgrounds = {
-    backgroundImage: `url("${baseUrl}story3.jpeg")`,
-    backgroundPosition: "top center",
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundColor: "var(--parchment)",
+  const cardBackground = {
+    backgroundImage: `url("${baseUrl}Untitled-2.png")`,
   } as CSSProperties;
 
   return (
@@ -26,7 +22,7 @@ export default function Home() {
       <PageHeightLogger />
       <Intro key={skipIntro ? "skipped" : "enabled"} monogram={w.monogram} disabled={skipIntro} />
 
-      <main className="stage" style={cardBackgrounds}>
+      <main className="stage">
         <article className="card">
           {/* Title sits outside the scaled column so it can be placed against the full-width artwork */}
           <header className="title">
@@ -35,14 +31,18 @@ export default function Home() {
             </h1>
           </header>
           <div className="column">
-          {/* ---------- Hero envelope ---------- */}
+          {/* ---------- Hero video ---------- */}
 
           <section className="hero" aria-label="Invitation">
+            {/* Envelope artwork replaced by the standalone hero video.
             <div className="hero-back" />
-
-            <ArchPainting className="hero-arch z-100" videoSrc={`${baseUrl}video.mp4`} />
+            <ArchPainting className="hero-arch" videoSrc={`${baseUrl}video.mp4`} />
             <WeddingBalcony className="hero-balcony" />
             <WaxSeal monogram={w.monogram} className="hero-seal" />
+            */}
+            <video className="hero-video" autoPlay loop muted playsInline aria-label="Wedding invitation video">
+              <source src={`${baseUrl}trimm.mp4`} type="video/mp4" />
+            </video>
           </section>
 
           {/* ---------- Music ---------- */}
@@ -188,6 +188,7 @@ export default function Home() {
        
           </div>
         </article>
+        <div className="stage-background" style={cardBackground} aria-hidden="true" />
       </main>
     </>
   );

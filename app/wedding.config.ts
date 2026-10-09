@@ -4,7 +4,7 @@ export const wedding = {
   development: {
     // Set to false when you want to test the opening curtain locally.
     // This setting is ignored in production builds.
-    skipIntro: true,
+    skipIntro: false,
   },
   bride: "Ashwini",
   groom: "Jason",

@@ -366,11 +366,6 @@ export function WeddingBalcony({ className = "" }: { className?: string }) {
         <circle cx="4" cy="3" r="5" fill="#6c1425" opacity="0.45" />
       </g>
 
-      <g transform="translate(200 126)">
-        <circle r="34" fill="url(#balconyGold)" />
-        <circle r="27" fill="#5b1122" stroke="#f5dfa0" strokeWidth="1.5" />
-        <path d="M0 17 C-25 2 -23 -15 -11 -19 C-4 -21 0 -15 0 -10 C0 -15 4 -21 11 -19 C23 -15 25 2 0 17Z" fill="#e3bd68" />
-      </g>
       <path d="M0 221 H400" stroke="url(#balconyGold)" strokeWidth="9" />
     </svg>
   );
