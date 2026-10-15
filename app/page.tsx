@@ -8,6 +8,7 @@ import { MusicPlayer } from "./components/MusicPlayer";
 import { Countdown } from "./components/Countdown";
 import { Calendar } from "./components/Calendar";
 import { PageHeightLogger } from "./components/PageHeightLogger";
+import { ScrollCue } from "./components/ScrollCue";
 
 export default function Home() {
   const skipIntro = process.env.NODE_ENV === "development" && w.development.skipIntro;
@@ -21,6 +22,7 @@ export default function Home() {
       <SvgDefs />
       <PageHeightLogger />
       <Intro key={skipIntro ? "skipped" : "enabled"} monogram={w.monogram} disabled={skipIntro} />
+      <ScrollCue />
 
       <main className="stage">
         <article className="card">
@@ -134,6 +136,9 @@ export default function Home() {
                   </h2>
                   <p className="event-date">{e.date}</p>
                   <p className="event-time">{e.time}</p>
+                  <p className="event-dress-code">
+                    <span>Dress code</span> — {e.dressCode}
+                  </p>
                   <span className="event-rule" />
                   <p className="event-venue">{e.venue}</p>
                   {e.address.map((a) => (

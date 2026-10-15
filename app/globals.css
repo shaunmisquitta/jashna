@@ -122,6 +122,54 @@ body {
   margin: 0 auto 64px;
 }
 
+/* A gentle prompt that helps guests discover the invitation below the fold. */
+.scroll-cue {
+  position: fixed;
+  z-index: 800;
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 9px 15px 7px;
+  border: 1px solid rgb(184 137 58 / 0.48);
+  border-radius: 999px;
+  background: rgb(251 249 244 / 0.9);
+  color: var(--wine-ink);
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: 0 7px 24px rgb(59 42 43 / 0.2);
+  opacity: 1;
+  transform: translateX(-50%);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+.scroll-cue svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: scrollCueBounce 1.5s ease-in-out infinite;
+}
+.scroll-cue-hidden,
+.intro-active .scroll-cue {
+  opacity: 0;
+  transform: translate(-50%, 12px);
+  pointer-events: none;
+}
+.scroll-cue:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
 /* ================================================================ */
 /* Shared pieces                                                     */
 /* ================================================================ */
@@ -942,6 +990,27 @@ html.opened .hero-seal {
   font-size: 13px;
   font-weight: 700;
   color: var(--wine-ink);
+}
+.event-dress-code {
+  margin-top: 6px;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.25;
+  color: #6d5a5a;
+}
+.event-dress-code span {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.event-haldi .event-dress-code {
+  color: #8a5c08;
+}
+.event-reception .event-dress-code {
+  color: #000;
 }
 .event-rule {
   width: 38px;
@@ -2791,6 +2860,15 @@ html.opened .hero-seal {
 @keyframes breathe {
   50% {
     opacity: 0.35;
+  }
+}
+@keyframes scrollCueBounce {
+  0%,
+  100% {
+    transform: translateY(-1px);
+  }
+  50% {
+    transform: translateY(3px);
   }
 }
 @keyframes sealPulse {
